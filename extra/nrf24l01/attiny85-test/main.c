@@ -1,10 +1,3 @@
-// main.c
-//
-// A simple blinky program for ATtiny85
-// Connect red LED at pin 2 (PB3)
-//
-// electronut.in
-
 #include <avr/io.h>
 #include <stdio.h>
 #include <util/delay.h>
@@ -14,7 +7,9 @@
 
 int main(void)
 {
+    // Configure interfaces
     configurePortsForSPI();
+    configureNRF();
 
     // Check if interface is working properly
     ledCheck(STATUS, 1);
@@ -23,7 +18,7 @@ int main(void)
 
     }
 
-    return 1;
+    return 0;
 }
 
 void configurePortsForSPI(void)
@@ -53,14 +48,84 @@ void configurePortsForSPI(void)
     CLEARBIT(PORTB, 3);
 }
 
+void configureNRF(void)
+{
+    // Allow radio to reach power down if shut down
+    _delay_ms(100);
+
+    uint8_t val[5];
+
+    // Enable autoacknowledgement
+    val[0]=0x01;
+    WRNrf(W, EN_AA, val, 1);
+
+    // Set number of retries to 15, with 750us in between
+    val[0]=0x2F;
+    WRNrf(W, SETUP_RETR, val, 1);
+
+    // Choose number of enabled datapipes (1-5), enable datapipe 0
+    val[0] = 0x01;
+    WRNrf(W, EN_RXADDR, val, 1);
+
+    // Set the receiver address to be of 5 bytes
+    // it can be 3, 4 or 5. Write 3 to select 5.
+    val[0] = 0x03;
+    WRNrf(W, SETUP_AW, val, 1);
+
+    // Choose the desired channel
+    // (2400 + channel)NHz
+    val[0] = 0x01;
+    WRNrf(W, RF_CH, val, 1);
+
+    // Choose power mode and data speed
+    // 00000111 bit 3=0 for 1Mbps, bit 2,1=(11 for 0dB, 00 for -18dB)
+    val[0] = 0x07;
+    WRNrf(W, RF_SETUP, val, 1);
+
+    // Setup the receiver address for communication, long and secure
+    int i;
+    for(i = 0; i < 5; ++i) {
+        val[i] = 0x12;
+    }
+    // We chose pipe 0, so we write to that pipe
+    WRNrf(W, RX_ADDR_P0, val, 5);
+
+    // Setup the transmitter address for communication
+    for(i = 0; i < 5; ++i) {
+        val[i] = 0x12;
+    }
+    // We chose pipe 0, so we write to that pipe
+    WRNrf(W, TX_ADDR, val, 5);
+
+    // Setup payload width
+    val[0] = PAYLOAD_WIDTH;
+    WRNrf(W, RX_PW_P0, val, 1);
+
+    // Configure nRF behavior, in this case:
+    // boot up nRF, decide wether it will transmit or receive
+    // and mask the irq signal
+    // 0b0001 1110, bit 0=('0'->transmitter; '1'-> receiver)
+    //              bit 1='1'->power up
+    //              bit 2='1'->CRC is 2 bytes (for error checking)
+    //              bit 3='1'->enable CRC
+    //              bit 4='1'->mask IRQ interruption
+    val[0] = 0x1E;
+    WRNrf(W, CONFIG, val, 1);
+
+    // Device needs 1.5ms to reach standby mode (CE=low)
+    _delay_ms(100);
+}
+
 uint8_t *WRNrf(uint8_t flag, uint8_t reg, uint8_t *val, uint8_t pkg_size)
 {
     // Set read or write mode (Read mode is 0x0+reg) so skip that
-    if(flag == W)
+    if(flag == W) {
         reg = W_REGISTER + reg;
+    }
 
     // Array to be returned at the end
     static uint8_t ret[32];
+    
     _delay_us(10);
     CLEARBIT(PORTB, 4);
     _delay_us(10);
@@ -80,7 +145,7 @@ uint8_t *WRNrf(uint8_t flag, uint8_t reg, uint8_t *val, uint8_t pkg_size)
     }
 
     CLEARBIT(PORTB, 4);
-    return reg;
+    return ret;
 }
 
 uint8_t writeReadByteSPI(uint8_t cData)
@@ -137,7 +202,7 @@ void ledCheck(uint8_t bt, int port)
         SETBIT(PORTB, port);
 
         // Recover previous state
-        _delay_ms(100);
+        _delay_ms(1000);
         PORTB = prev_state;
         USICR |= (1<<USIWM0);
     }

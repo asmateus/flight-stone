@@ -1,3 +1,5 @@
+#define PAYLOAD_WIDTH 5
+
 // Initialization function
 void configurePortsForSPI(void);
 
@@ -11,4 +13,7 @@ uint8_t SPICommProbe(uint8_t);
 void ledCheck(uint8_t, int);
 
 // Write and Read from nRF
-uint8_t *WRNrf(uint8_t, uint8_t, uint8_t, uint8_t);
+uint8_t *WRNrf(uint8_t, uint8_t, uint8_t *, uint8_t);
+
+// Configure the transmision of the nRF (search for ShockBurst packet configuration for more info)
+void configureNRF(void);
