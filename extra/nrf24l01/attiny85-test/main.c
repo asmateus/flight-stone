@@ -7,12 +7,14 @@
 
 int main(void)
 {
-    // Configure interfaces
+    // Configure SPI interface
     configurePortsForSPI();
-    configureNRF();
 
-    // Check if interface is working properly
+    // Check if SPI interface is working properly
     ledCheck(STATUS, 1);
+
+    // Configure nRF
+    configureNRF();
 
     while(1) {
 
