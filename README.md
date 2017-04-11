@@ -1,2 +1,8 @@
-# flight-stone
-API for low cost indoor drone navigation
+# FlightStone
+FlightStone is a complete platform for drone navigation in bounded environments (it is tested indoor). The system comprises an onboard controller for obstacle avoidance and path finding (using information obtained from proximity sensors and a cheap camera), a wireless sensor network for accurate positioning of the drone via adaptive triangulation and a base server were information is stored/retreived from and the hard computation is performed, if needed (this can be toggled).
+
+## Content
+This repository contains the firmware of the wireless sensor network (WSN) and onboard controller (OC), and the source code for the base server. As you can see it is a large solution so be sure to read through the documentation before building. Pre-compiled code is offered for the WSN and OC, as this is base code were you are expected to have the correct hardware. A guide to build the solution is offered, from code documentation to electrical characteristics, such as device selection, bill of materials, gerber schematics of the circuits, performance and limitations, etc.
+
+## Usage
+Usage information is rather large so, go to the source directly.
