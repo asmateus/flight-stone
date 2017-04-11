@@ -11,13 +11,29 @@ int main(void)
     configurePortsForSPI();
 
     // Check if SPI interface is working properly
-    ledCheck(STATUS, 1);
+    ledCheck(STATUS, 0x0E, 1);
 
     // Configure nRF
     configureNRF();
 
-    while(1) {
+    // Create dummy information to transmit
+    uint8_t dummy[PAYLOAD_WIDTH];
+    int i;
+    for(i = 0; i < PAYLOAD_WIDTH; ++i) {
+        dummy[i] = 0x93;
+    }
 
+    while(1) {
+        transmitPayload(dummy);
+
+        // Check sanity of transmission
+        if((SPICommProbe(STATUS) & (1<<4)) != 0) {
+            // Failed
+            ledCheck(STATUS, SPICommProbe(STATUS), 1);
+        }
+        resetIRQ();
+
+        _delay_ms(1000);
     }
 
     return 0;
@@ -118,6 +134,38 @@ void configureNRF(void)
     _delay_ms(100);
 }
 
+void resetIRQ(void)
+{
+    _delay_us(10);
+    CLEARBIT(PORTB, 4);
+    _delay_us(10);
+    writeReadByteSPI(W_REGISTER + STATUS);
+    _delay_us(10);
+    writeReadByteSPI(0x70);
+    _delay_us(10);
+    SETBIT(PORTB, 4);
+}
+
+void transmitPayload(uint8_t *data_buffer)
+{
+    // Flush buffer from old data, here data_buffer is dummy, it is
+    // passed only because the function requires such a parameter
+    WRNrf(R, FLUSH_TX, data_buffer, 0);
+
+    // Send the data in the buffer to the nRF
+    // Used R because W_TX_PAYLOAD is on the highest byte-level
+    WRNrf(R, W_TX_PAYLOAD, data_buffer, PAYLOAD_WIDTH);
+
+    // Timeout after payload was loaded
+    _delay_ms(10);
+
+    // Transmit data
+    SETBIT(PORTB, 3);
+    _delay_us(20);
+    CLEARBIT(PORTB, 3);
+    _delay_ms(10);
+}
+
 uint8_t *WRNrf(uint8_t flag, uint8_t reg, uint8_t *val, uint8_t pkg_size)
 {
     // Set read or write mode (Read mode is 0x0+reg) so skip that
@@ -195,10 +243,10 @@ uint8_t SPICommProbe(uint8_t reg)
     return reg;
 }
 
-void ledCheck(uint8_t bt, int port)
+void ledCheck(uint8_t bt, uint8_t expected, int port)
 {
     uint8_t prev_state = PORTB;
-    if(SPICommProbe(bt) == 0x0E) {
+    if(SPICommProbe(bt) == expected) {
         // Enable PORTB for LED checking
         USICR &= ~(1<<USIWM0);
         SETBIT(PORTB, port);
@@ -209,8 +257,3 @@ void ledCheck(uint8_t bt, int port)
         USICR |= (1<<USIWM0);
     }
 }
-
-
-
-
-
