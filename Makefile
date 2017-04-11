@@ -1,0 +1,1 @@
+# This is the general makefile, it assumes avrdude, and usbasp
