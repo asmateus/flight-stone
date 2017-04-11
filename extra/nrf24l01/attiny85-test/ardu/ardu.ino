@@ -13,6 +13,7 @@
 
 #define CSN_PIN 2
 #define CE_PIN 0
+#define PAYLOAD_WIDTH 19
 
 void initSPI(void);
 char WriteByteSPI(unsigned char);
@@ -47,13 +48,13 @@ void loop()
     Serial.println(GetReg(STATUS));  
   }
   else {
-    data = WriteToNrf(R, R_RX_PAYLOAD, data, 5);
-
-    for(int i = 0; i < 5; ++i) {
+    data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);
+    Serial.println((char*) data);
+    /*for(int i = 0; i < 5; ++i) {
       Serial.print(data[i]);
       Serial.print(" ");  
     }
-    Serial.println("");
+    Serial.println("");*/
     reset();
   }
 }
@@ -131,7 +132,7 @@ void nrf24L01_init(void)
   }
   WriteToNrf(W, TX_ADDR, val, 5); 
  
-  val[0]=5;
+  val[0]=PAYLOAD_WIDTH;
   WriteToNrf(W, RX_PW_P0, val, 1);
   
   val[0]=0x1F;

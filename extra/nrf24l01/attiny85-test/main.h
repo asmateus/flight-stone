@@ -1,4 +1,6 @@
-#define PAYLOAD_WIDTH 5
+#define PAYLOAD_WIDTH 19
+#define CSN_PIN 4
+#define CE_PIN 3
 
 // Initialization function
 void configurePortsForSPI(void);

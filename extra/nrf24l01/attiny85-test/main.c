@@ -17,11 +17,13 @@ int main(void)
     configureNRF();
 
     // Create dummy information to transmit
-    uint8_t dummy[PAYLOAD_WIDTH];
-    int i;
-    for(i = 0; i < PAYLOAD_WIDTH; ++i) {
-        dummy[i] = 0x93;
-    }
+    uint8_t dummy[PAYLOAD_WIDTH] = {0x61, 0x6E, 0x64, 0x72, 0x65, 0x73, 0x20, 0x69,
+                                    0x73, 0x20, 0x6D, 0x79, 0x20, 0x6D, 0x61, 0x73,
+                                    0x74, 0x65, 0x72};
+    //int i;
+    //for(i = 0; i < PAYLOAD_WIDTH; ++i) {
+    //    dummy[i] = 0x93;
+    //}
 
     while(1) {
         transmitPayload(dummy);
@@ -62,8 +64,8 @@ void configurePortsForSPI(void)
     USICR |= (1<<USIWM0) | (1<<USICS1) | (1<<USICLK);
 
     // Nothing to send/receive yet. CSN to high, CE to low
-    SETBIT(PORTB, 4);
-    CLEARBIT(PORTB, 3);
+    SETBIT(PORTB, CSN_PIN);
+    CLEARBIT(PORTB, CE_PIN);
 }
 
 void configureNRF(void)
@@ -137,13 +139,13 @@ void configureNRF(void)
 void resetIRQ(void)
 {
     _delay_us(10);
-    CLEARBIT(PORTB, 4);
+    CLEARBIT(PORTB, CSN_PIN);
     _delay_us(10);
     writeReadByteSPI(W_REGISTER + STATUS);
     _delay_us(10);
     writeReadByteSPI(0x70);
     _delay_us(10);
-    SETBIT(PORTB, 4);
+    SETBIT(PORTB, CSN_PIN);
 }
 
 void transmitPayload(uint8_t *data_buffer)
@@ -160,9 +162,9 @@ void transmitPayload(uint8_t *data_buffer)
     _delay_ms(10);
 
     // Transmit data
-    SETBIT(PORTB, 3);
+    SETBIT(PORTB, CE_PIN);
     _delay_us(20);
-    CLEARBIT(PORTB, 3);
+    CLEARBIT(PORTB, CE_PIN);
     _delay_ms(10);
 }
 
@@ -177,7 +179,7 @@ uint8_t *WRNrf(uint8_t flag, uint8_t reg, uint8_t *val, uint8_t pkg_size)
     static uint8_t ret[32];
     
     _delay_us(10);
-    CLEARBIT(PORTB, 4);
+    CLEARBIT(PORTB, CSN_PIN);
     _delay_us(10);
     writeReadByteSPI(reg);
     _delay_us(10);
@@ -194,7 +196,7 @@ uint8_t *WRNrf(uint8_t flag, uint8_t reg, uint8_t *val, uint8_t pkg_size)
         }
     }
 
-    CLEARBIT(PORTB, 4);
+    SETBIT(PORTB, CSN_PIN);
     return ret;
 }
 
@@ -226,7 +228,7 @@ uint8_t SPICommProbe(uint8_t reg)
     _delay_us(10);
 
     // Drive CSN low so that nRF starts to listen for command
-    CLEARBIT(PORTB, 4);
+    CLEARBIT(PORTB, CSN_PIN);
     _delay_us(10);
 
     // Set nRF to reading mode
@@ -238,7 +240,7 @@ uint8_t SPICommProbe(uint8_t reg)
     _delay_us(10);
 
     // Set CSN Hi - nRF goes back to doing nothing
-    SETBIT(PORTB, 4);
+    SETBIT(PORTB, CSN_PIN);
 
     return reg;
 }

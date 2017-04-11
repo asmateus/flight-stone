@@ -121,6 +121,15 @@ void uglyPrint(void)
 
 void initSPI(void)
 {
+  // Pins
+  /*
+  * CE   = PORTB4 10
+  * CSN  = PORTB0 53
+  * MOSI = PORTB2 51
+  * SCK  = PORTB1 52
+  * MISO = PORTB3 50
+  *
+  */
    DDRB |= (1 << DDB4) | (1 << DDB2) | (1 << DDB1) | (1 << DDB0);
    
    SPCR |= (1<<SPE) | (1<<MSTR) | (1<<SPR0);
