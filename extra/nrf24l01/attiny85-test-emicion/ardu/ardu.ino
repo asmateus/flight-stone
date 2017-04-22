@@ -37,7 +37,7 @@ void setup()
   }
   
   nrf24L01_init();
-  Serial.println(PORTB);
+  //Serial.println(PORTB);
 }
 
 void loop()
@@ -45,7 +45,7 @@ void loop()
   receive_payload();
    
   if((GetReg(STATUS) & (1<<6)) == 0) {
-    Serial.println(GetReg(STATUS));  
+    Serial.println("NOP");  
   }
   else {
     data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);

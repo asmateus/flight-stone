@@ -13,6 +13,7 @@
 
 #define CSN_PIN 0
 #define CE_PIN 4
+#define PAYLOAD_WIDTH 19
 
 void initSPI(void);
 char WriteByteSPI(unsigned char);
@@ -26,7 +27,10 @@ void receiver(void);
 void sender(void);
 
 uint8_t *data;
-uint8_t dummy[5];
+uint8_t dummy[PAYLOAD_WIDTH] = {0x61, 0x6E, 0x64, 0x72, 0x65, 0x73, 0x20, 0x69,
+                                    0x73, 0x20, 0x6D, 0x79, 0x20, 0x6D, 0x61, 0x73,
+                                      0x74, 0x65, 0x72};
+    
 
 void setup()
 {
@@ -41,10 +45,11 @@ void setup()
   
   nrf24L01_init();
   uglyPrint();
-
+  /*
   for(int i = 0; i < 5; ++i) {
       dummy[i] = 0x93;
   }
+  */
 }
 
 void loop()
@@ -154,7 +159,7 @@ void transmit_payload(uint8_t * W_buff)
 {
   WriteToNrf(R, FLUSH_TX, W_buff, 0);
     
-  WriteToNrf(R, W_TX_PAYLOAD, W_buff, 5); 
+  WriteToNrf(R, W_TX_PAYLOAD, W_buff, PAYLOAD_WIDTH); 
 
   delay(10);    
   SETBIT(PORTB, CE_PIN);
