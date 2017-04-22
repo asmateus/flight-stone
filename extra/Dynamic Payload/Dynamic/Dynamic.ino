@@ -11,8 +11,8 @@
 
 #include "nRF24L01.h"
 
-#define CSN_PIN 2
-#define CE_PIN 0
+#define CSN_PIN 0
+#define CE_PIN 4
 #define PAYLOAD_WIDTH 19
 
 void initSPI(void);
@@ -22,8 +22,15 @@ uint8_t *WriteToNrf(uint8_t, uint8_t, uint8_t*, uint8_t);
 void nrf24L01_init(void);
 void receive_payload(void);
 void reset(void);
+void uglyPrint(void);
+void receiver(void);
+void sender(void);
 
 uint8_t *data;
+uint8_t dummy[PAYLOAD_WIDTH] = {0x61, 0x6E, 0x64, 0x72, 0x65, 0x73, 0x20, 0x69,
+                                    0x73, 0x20, 0x6D, 0x79, 0x20, 0x6D, 0x61, 0x73,
+                                      0x74, 0x65, 0x72};
+    
 
 void setup()
 {
@@ -37,31 +44,98 @@ void setup()
   }
   
   nrf24L01_init();
-  //Serial.println(PORTB);
+  uglyPrint();
+  /*
+  for(int i = 0; i < 5; ++i) {
+      dummy[i] = 0x93;
+  }
+  */
 }
 
 void loop()
 {
+  delay(1000);
+  //receiver();
+  sender();
+  
+}
+
+void sender(void)
+{
+  transmit_payload(dummy);
+  if((GetReg(STATUS) & (1<<4)) != 0) {
+    Serial.println("Failed");  
+  }
+  else {
+    Serial.println("Success");
+  }
+  reset();
+}
+
+void receiver(void)
+{
   receive_payload();
    
   if((GetReg(STATUS) & (1<<6)) == 0) {
-    Serial.println("NOP");  
+    Serial.println(GetReg(STATUS));  
   }
   else {
-    data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);
-    Serial.println((char*) data);
-    /*for(int i = 0; i < 5; ++i) {
+    data = WriteToNrf(R, R_RX_PAYLOAD, data, 5);
+
+    for(int i = 0; i < 5; ++i) {
       Serial.print(data[i]);
       Serial.print(" ");  
     }
-    Serial.println("");*/
+    Serial.println("");
     reset();
   }
 }
 
+void uglyPrint(void)
+{
+  Serial.println("** Printing configuration **");
+  Serial.print("EN_AA: ");
+  Serial.println(GetReg(EN_AA));
+  Serial.print("SETUP_RETR: ");
+  Serial.println(GetReg(SETUP_RETR));
+  Serial.print("EN_RXADDR: ");
+  Serial.println(GetReg(EN_RXADDR));
+  Serial.print("SETUP_AW: ");
+  Serial.println(GetReg(SETUP_AW));
+  Serial.print("RF_CH: ");
+  Serial.println(GetReg(RF_CH));
+  Serial.print("RF_SETUP: ");
+  Serial.println(GetReg(RF_SETUP));
+  data = WriteToNrf(R, RX_ADDR_P0, data, 5);
+  Serial.print("RX_ADDR_P0: ");
+  for(int i = 0; i < 5; ++i) {
+    Serial.print(data[i]);  
+  }
+  Serial.println("");
+  data = WriteToNrf(R, TX_ADDR, data, 5);
+  Serial.print("TX_ADDR: ");
+  for(int i = 0; i < 5; ++i) {
+    Serial.print(data[i]);  
+  }
+  Serial.println("");
+  Serial.print("RX_PW_P0: ");
+  Serial.println(GetReg(RX_PW_P0));
+  Serial.print("CONFIG: ");
+  Serial.println(GetReg(CONFIG));
+}
+
 void initSPI(void)
 {
-   DDRB |= (1 << DDB5) | (1 << DDB3) | (1 << DDB2) | (1 << DDB0);
+  // Pins
+  /*
+  * CE   = PORTB4 10
+  * CSN  = PORTB0 53
+  * MOSI = PORTB2 51
+  * SCK  = PORTB1 52
+  * MISO = PORTB3 50
+  *
+  */
+   DDRB |= (1 << DDB4) | (1 << DDB2) | (1 << DDB1) | (1 << DDB0);
    
    SPCR |= (1<<SPE) | (1<<MSTR) | (1<<SPR0);
 
@@ -81,6 +155,20 @@ void reset(void)
   SETBIT(PORTB, CSN_PIN);
 }
 
+void transmit_payload(uint8_t * W_buff)
+{
+  WriteToNrf(R, FLUSH_TX, W_buff, 0);
+    
+  WriteToNrf(R, W_TX_PAYLOAD, W_buff, PAYLOAD_WIDTH); 
+
+  delay(10);    
+  SETBIT(PORTB, CE_PIN);
+  delayMicroseconds(20);   
+  CLEARBIT(PORTB, CE_PIN);
+  delay(10); 
+
+}
+
 
 void receive_payload(void)
 {
@@ -94,9 +182,9 @@ void nrf24L01_init(void)
   delay(100);
   
   uint8_t val[5]; 
-
+ 
   val[0]=0x01; 
-  WriteToNrf(W, EN_AA, val, 1); 
+  WriteToNrf(W, EN_AA, val, 1); //Seteo EN_AA
   
   val[0]=0x06;
   WriteToNrf(W, FEATURE, val, 1); //Seteo Feature DPL
@@ -134,10 +222,10 @@ void nrf24L01_init(void)
   }
   WriteToNrf(W, TX_ADDR, val, 5); 
  
-  val[0]=PAYLOAD_WIDTH;
+  val[0]=5;
   WriteToNrf(W, RX_PW_P0, val, 1);
   
-  val[0]=0x1F;
+  val[0]=0x1E;
   WriteToNrf(W, CONFIG, val, 1);
 
   delay(100); 
@@ -207,4 +295,3 @@ uint8_t GetReg(uint8_t reg)
   SETBIT(PORTB, CSN_PIN);
   return reg;
 }
-
