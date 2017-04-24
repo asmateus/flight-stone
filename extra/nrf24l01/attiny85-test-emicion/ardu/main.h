@@ -1,4 +1,4 @@
-#define PAYLOAD_WIDTH 5
+#define PAYLOAD_WIDTH 19
 
 // Initialization function
 void configurePortsForSPI(void);

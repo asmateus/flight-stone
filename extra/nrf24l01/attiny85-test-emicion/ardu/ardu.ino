@@ -37,7 +37,7 @@ void setup()
   }
   
   nrf24L01_init();
-  Serial.println(PORTB);
+  //Serial.println(PORTB);
 }
 
 void loop()
@@ -45,7 +45,7 @@ void loop()
   receive_payload();
    
   if((GetReg(STATUS) & (1<<6)) == 0) {
-    Serial.println(GetReg(STATUS));  
+    Serial.println("NOP");  
   }
   else {
     data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);
@@ -95,9 +95,11 @@ void nrf24L01_init(void)
   
   uint8_t val[5]; 
 
- 
   val[0]=0x01; 
   WriteToNrf(W, EN_AA, val, 1); 
+  
+  val[0]=0x06;
+  WriteToNrf(W, FEATURE, val, 1); //Seteo Feature DPL
   
   //SETUP_RETR (the setup for "EN_AA")
   val[0]=0x2F; 

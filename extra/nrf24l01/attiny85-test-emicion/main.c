@@ -12,7 +12,7 @@ int main(void)
 
     // Check if SPI interface is working properly
     ledCheck(STATUS, 0x0E, 1);
-
+    //Delay
     // Configure nRF
     configureNRF();
 

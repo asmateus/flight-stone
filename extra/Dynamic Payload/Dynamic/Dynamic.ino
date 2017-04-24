@@ -182,10 +182,12 @@ void nrf24L01_init(void)
   delay(100);
   
   uint8_t val[5]; 
-
  
   val[0]=0x01; 
-  WriteToNrf(W, EN_AA, val, 1); 
+  WriteToNrf(W, EN_AA, val, 1); //Seteo EN_AA
+  
+  val[0]=0x06;
+  WriteToNrf(W, FEATURE, val, 1); //Seteo Feature DPL
   
   //SETUP_RETR (the setup for "EN_AA")
   val[0]=0x2F; 
@@ -293,4 +295,3 @@ uint8_t GetReg(uint8_t reg)
   SETBIT(PORTB, CSN_PIN);
   return reg;
 }
-
