@@ -24,7 +24,9 @@ void receive_payload(void);
 void reset(void);
 
 uint8_t *data;
-
+unsigned long i = 0;
+unsigned long e = 0;
+unsigned long l = 0;
 void setup()
 {
   Serial.begin(115200);
@@ -37,6 +39,7 @@ void setup()
   }
   
   nrf24L01_init();
+  i = micros();
   //Serial.println(PORTB);
 }
 
@@ -48,8 +51,14 @@ void loop()
     Serial.println("NOP");  
   }
   else {
+    Serial.print("He contado: ");
+    e = micros();
+    l = e - i;
+    i = micros();
+    Serial.print(l);
+    Serial.println(", Amo.");
     data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);
-    Serial.println((char*) data);
+    //Serial.println((char*) data);
     /*for(int i = 0; i < 5; ++i) {
       Serial.print(data[i]);
       Serial.print(" ");  
@@ -85,7 +94,7 @@ void reset(void)
 void receive_payload(void)
 {
   SETBIT(PORTB, CE_PIN);
-  delay(1000);  
+  delay(20);  
   CLEARBIT(PORTB, CE_PIN);
 }
 

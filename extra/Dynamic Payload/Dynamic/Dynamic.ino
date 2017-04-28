@@ -30,6 +30,7 @@ uint8_t *data;
 uint8_t dummy[PAYLOAD_WIDTH] = {0x61, 0x6E, 0x64, 0x72, 0x65, 0x73, 0x20, 0x69,
                                     0x73, 0x20, 0x6D, 0x79, 0x20, 0x6D, 0x61, 0x73,
                                       0x74, 0x65, 0x72};
+int unsigned long i=0;
     
 
 void setup()
@@ -54,9 +55,9 @@ void setup()
 
 void loop()
 {
-  delay(1000);
-  //receiver();
-  sender();
+  ++i;
+  receiver();
+  //sender();
   
 }
 
@@ -80,6 +81,7 @@ void receiver(void)
     Serial.println(GetReg(STATUS));  
   }
   else {
+    Serial.println(i);i=0;
     data = WriteToNrf(R, R_RX_PAYLOAD, data, 5);
 
     for(int i = 0; i < 5; ++i) {
