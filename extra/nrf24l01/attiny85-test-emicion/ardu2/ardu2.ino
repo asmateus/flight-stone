@@ -27,9 +27,6 @@ void receiver(void);
 void sender(void);
 
 uint8_t *data;
-unsigned long init_time = 0;
-unsigned long end_time = 0;
-unsigned long elapsed_time = 0;
 uint8_t dummy[PAYLOAD_WIDTH] = {0x61, 0x6E, 0x64, 0x72, 0x65, 0x73, 0x20, 0x69,
                                     0x73, 0x20, 0x6D, 0x79, 0x20, 0x6D, 0x61, 0x73,
                                       0x74, 0x65, 0x72};
@@ -48,41 +45,32 @@ void setup()
   
   nrf24L01_init();
   uglyPrint();
+  /*
+  for(int i = 0; i < 5; ++i) {
+      dummy[i] = 0x93;
+  }
+  */
 }
 
 void loop()
 {
-  transmit_payload(dummy);
+  //receiver();
   sender();
-  if((GetReg(STATUS) & (1<<4)) != 0) {}
-  else {
-    end_time = micros();
-    elapsed_time = end_time - init_time;
-    Serial.print("Elapsed time: ");
-    Serial.println(elapsed_time);
-
-    //CLEARBIT(PORTB, CE_PIN);
-    delay(1000);
-    transmit_payload(dummy);
-    reset();
-    //SETBIT(PORTB, CE_PIN);
-    init_time = micros();
-  }
+  Serial.print("CONFIG: ");
+  Serial.println(GetReg(CONFIG));
+  
 }
 
 void sender(void)
-{ 
-  delay(10);
-  SETBIT(PORTB, CE_PIN);
-  delayMicroseconds(20);
-  CLEARBIT(PORTB, CE_PIN);
-  delay(10); 
-}
-
-void transmit_payload(uint8_t * W_buff)
 {
-  WriteToNrf(R, FLUSH_TX, W_buff, 0);
-  WriteToNrf(R, W_TX_PAYLOAD, W_buff, PAYLOAD_WIDTH); 
+  transmit_payload(dummy);
+  if((GetReg(STATUS) & (1<<4)) != 0) {
+    Serial.println("Failed");  
+  }
+  else {
+    Serial.println("Success");
+  }
+  reset();
 }
 
 void receiver(void)
@@ -168,6 +156,21 @@ void reset(void)
   SETBIT(PORTB, CSN_PIN);
 }
 
+void transmit_payload(uint8_t * W_buff)
+{
+  WriteToNrf(R, FLUSH_TX, W_buff, 0);
+    
+  WriteToNrf(R, W_TX_PAYLOAD, W_buff, PAYLOAD_WIDTH); 
+
+  delay(10);    
+  SETBIT(PORTB, CE_PIN);
+  delayMicroseconds(20);   
+  CLEARBIT(PORTB, CE_PIN);
+  delay(10); 
+
+}
+
+
 void receive_payload(void)
 {
   SETBIT(PORTB, CE_PIN);
@@ -184,6 +187,10 @@ void nrf24L01_init(void)
  
   val[0]=0x01; 
   WriteToNrf(W, EN_AA, val, 1); 
+  
+  val[0]=0x06;
+  WriteToNrf(W, FEATURE, val, 1); //Seteo Feature DPL
+  
   
   //SETUP_RETR (the setup for "EN_AA")
   val[0]=0x2F; 
@@ -291,4 +298,5 @@ uint8_t GetReg(uint8_t reg)
   SETBIT(PORTB, CSN_PIN);
   return reg;
 }
+
 

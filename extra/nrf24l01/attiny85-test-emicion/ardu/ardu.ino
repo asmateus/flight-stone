@@ -24,7 +24,9 @@ void receive_payload(void);
 void reset(void);
 
 uint8_t *data;
-
+unsigned long i = 0;
+unsigned long e = 0;
+unsigned long l = 0;
 void setup()
 {
   Serial.begin(115200);
@@ -37,6 +39,8 @@ void setup()
   }
   
   nrf24L01_init();
+  i = micros();
+  //Serial.println(PORTB);
 }
 
 void loop()
@@ -44,20 +48,24 @@ void loop()
   receive_payload();
    
   if((GetReg(STATUS) & (1<<6)) == 0) {
-    Serial.println(STATUS);  
+    Serial.println("NOP");  
   }
   else {
+    Serial.print("He contado: ");
+    e = micros();
+    l = e - i;
+    i = micros();
+    Serial.print(l);
+    Serial.println(", Amo.");
     data = WriteToNrf(R, R_RX_PAYLOAD, data, PAYLOAD_WIDTH);
-    Serial.println((char*) data);
+    //Serial.println((char*) data);
+    /*for(int i = 0; i < 5; ++i) {
+      Serial.print(data[i]);
+      Serial.print(" ");  
+    }
+    Serial.println("");*/
     reset();
   }
-}
-
-void receive_payload(void)
-{
-  SETBIT(PORTB, CE_PIN);
-  delay(20);
-  CLEARBIT(PORTB, CE_PIN);
 }
 
 void initSPI(void)
@@ -80,6 +88,14 @@ void reset(void)
   WriteByteSPI(0b01110000); 
   delayMicroseconds(10);
   SETBIT(PORTB, CSN_PIN);
+}
+
+
+void receive_payload(void)
+{
+  SETBIT(PORTB, CE_PIN);
+  delay(20);  
+  CLEARBIT(PORTB, CE_PIN);
 }
 
 void nrf24L01_init(void)
@@ -200,4 +216,5 @@ uint8_t GetReg(uint8_t reg)
   SETBIT(PORTB, CSN_PIN);
   return reg;
 }
+
 
