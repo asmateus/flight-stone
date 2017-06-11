@@ -1,6 +1,6 @@
 # FlightStone
 
-[![Build Status](https://img.shields.io/teamcity/http/teamcity.jetbrains.com/s/bt345.svg)](https://github.com/asmateus/flight-stone)
+[![Build Status](https://travis-ci.org/asmateus/flight-stone.svg?branch=master)](https://github.com/asmateus/flight-stone)
 
 
 
