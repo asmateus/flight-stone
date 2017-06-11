@@ -14,5 +14,5 @@ install:
   - sudo apt-get install 
 
 script: 
-  - g++ -std=c++11 test/TestDrive.cpp -o test/main.exe
-  - ./test/main.exe
+  - g++ -std=c++11 test/main.cpp -o test/out.exe
+  - ./test/out.exe
