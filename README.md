@@ -1,4 +1,9 @@
 # FlightStone
+
+[![Build Status](URL)](https://github.com/asmateus/flight-stone)
+
+
+
 FlightStone is a complete platform for drone navigation in bounded environments (it is tested indoor). The system comprises an onboard controller for obstacle avoidance and path finding (using information obtained from proximity sensors and a cheap camera), a wireless sensor network for accurate positioning of the drone via adaptive triangulation and a base server were information is stored/retreived from and the hard computation is performed, if needed (this can be toggled).
 
 ## Content
