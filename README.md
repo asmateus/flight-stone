@@ -16,3 +16,5 @@ Usage information is rather large so, go to the source directly.
 ## References
 
 [1] Hagström, K. (2013). Tutorial - nRF24L01 and AVR. [online] Gizmosnack.blogspot.com.co. Available at: http://gizmosnack.blogspot.com.co/2013/04/tutorial-nrf24l01-and-avr.html [Accessed 11 Jun. 2017].
+
+[2] http://www.atmel.com/images/atmel-2586-avr-8-bit-microcontroller-attiny25-attiny45-attiny85_datasheet.pdf
