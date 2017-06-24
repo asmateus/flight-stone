@@ -17,6 +17,7 @@ Usage information is rather large so, go to the source directly.
 
 ## Versioning
 *Current version: **1.0624***
+
 Versioning is done through milestones and through issue completion. The number after the decimal point indicates the milestone we are in, the number before it is composed by the date the last feature change was made. Different branches may have different versions, but the official one is always in the master branch. Each time a major version change occurs you will see a new release with a fancy name.
 
 ## References
