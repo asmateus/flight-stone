@@ -9,9 +9,15 @@ FlightStone is a complete platform for drone navigation in bounded environments 
 ## Content
 This repository contains the firmware of the wireless sensor network (WSN) and onboard controller (OC), and the source code for the base server. As you can see it is a large solution so be sure to read through the documentation before building. Pre-compiled code is offered for the WSN and OC, as this is base code were you are expected to have the correct hardware. A guide to build the solution is offered, from code documentation to electrical characteristics, such as device selection, bill of materials, gerber schematics of the circuits, performance and limitations, etc.
 
+## Impact
+Write here the possible uses of what we are doing
+
 ## Usage
 Usage information is rather large so, go to the source directly.
 
+## Versioning
+*Current version: **1.0624***
+Versioning is done through milestones and through issue completion. The number after the decimal point indicates the milestone we are in, the number before it is composed by the date the last feature change was made. Different branches may have different versions, but the official one is always in the master branch. Each time a major version change occurs you will see a new release with a fancy name.
 
 ## References
 
