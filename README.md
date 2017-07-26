@@ -1,6 +1,7 @@
 # FlightStone
 
 [![Build Status](https://travis-ci.org/asmateus/flight-stone.svg?branch=master)](https://travis-ci.org/asmateus/flight-stone)
+[![Documentation Status](https://readthedocs.org/projects/flight-stone/badge/?version=latest)](http://flight-stone.readthedocs.io/en/latest/?badge=latest)
 
 
 
