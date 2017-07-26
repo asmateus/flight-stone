@@ -1,0 +1,24 @@
+{
+	"build_systems":
+	[
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"/home/asmateus/py-envs/dj/bin/python\" -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"path": "."
+		},
+		{
+			"path": "/home/asmateus/Documents/taolu-enhancer-a3dcd71c902486fc8bd0a6d168ed9831013c4ccf/taolu-enhancer"
+		}
+	],
+	"settings":
+	{
+		"python_interpreter": "/home/asmateus/py-envs/dj/bin/python"
+	}
+}

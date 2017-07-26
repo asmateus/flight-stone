@@ -1,0 +1,915 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"auth",
+				"authtoken\tmodule"
+			],
+			[
+				"Bas",
+				"BasicAuthentication\tclass"
+			],
+			[
+				"Tok",
+				"TokenAuthentication\tclass"
+			],
+			[
+				"tr",
+				"tr_status\tparam"
+			],
+			[
+				"RES",
+				"RESULT_REJECTED\tstatement"
+			],
+			[
+				"pet",
+				"petition_associator\tstatement"
+			],
+			[
+				"US",
+				"TYPE_USER_LOGOUT\tstatement"
+			],
+			[
+				"GE",
+				"TYPE_GENERAL_INFO_DOWNLOAD\tstatement"
+			],
+			[
+				"IT",
+				"TYPE_ITEM_MANIPULATION\tstatement"
+			],
+			[
+				"TYPE_CL",
+				"TYPE_CLIENT_DISCONNECTION_SIGNAL\tstatement"
+			],
+			[
+				"deco",
+				"decorators\tmodule"
+			],
+			[
+				"csrf",
+				"csrf_exempt\tfunction"
+			],
+			[
+				"S",
+				"SnippetDetail\tclass"
+			],
+			[
+				"Sni",
+				"SnippetList\tclass"
+			],
+			[
+				"url",
+				"urlpatterns\tstatement"
+			],
+			[
+				"form",
+				"format_suffix_patterns\timport"
+			],
+			[
+				"get",
+				"get_all_styles\tfunction"
+			],
+			[
+				"st",
+				"styles\tmodule"
+			],
+			[
+				"USER",
+				"USER_OFFSET\tstatement"
+			],
+			[
+				"pro",
+				"promote_pieces\tstatement"
+			],
+			[
+				"MOV",
+				"MOVE_TYPES\tstatement"
+			],
+			[
+				"C",
+				"CharField"
+			],
+			[
+				"DE",
+				"DEFAULT_PLAYER"
+			],
+			[
+				"F",
+				"ForeignKey"
+			],
+			[
+				"max",
+				"max_length"
+			],
+			[
+				"fi",
+				"final_val"
+			],
+			[
+				"as",
+				"astype"
+			],
+			[
+				"nota",
+				"nota11e"
+			],
+			[
+				"not",
+				"nota11a"
+			],
+			[
+				"artic",
+				"article_params"
+			],
+			[
+				"par",
+				"params"
+			],
+			[
+				"Ar",
+				"Article"
+			],
+			[
+				"ar",
+				"Article"
+			],
+			[
+				"AC",
+				"ACCESS_LEVEL_LOGIN"
+			],
+			[
+				"ac",
+				"ACCESS_LEVEL_LOGIN"
+			],
+			[
+				"id",
+				"id_token"
+			],
+			[
+				"ACC",
+				"ACCESS_LEVEL_AUTO_LOGIN_LOGOUT"
+			],
+			[
+				"gt",
+				"getPrivateKey"
+			],
+			[
+				"user",
+				"user_data"
+			],
+			[
+				"act",
+				"act_type"
+			],
+			[
+				"return",
+				"return_message"
+			],
+			[
+				"acc",
+				"access_level"
+			],
+			[
+				"PCK",
+				"PCK_TYPE_LOGIN"
+			],
+			[
+				"of",
+				"offset"
+			],
+			[
+				"int",
+				"interval"
+			],
+			[
+				"con",
+				"conn_path"
+			],
+			[
+				"CONN",
+				"CONNECTION_TYPE_WALL"
+			],
+			[
+				"CON",
+				"CONNECTION_TYPE_COMMUNITY"
+			],
+			[
+				"PC",
+				"PCK_DATA_KEY_DATA_TYPE"
+			],
+			[
+				"data_",
+				"data_params"
+			],
+			[
+				"data",
+				"data_type"
+			],
+			[
+				"conn",
+				"conn_type"
+			],
+			[
+				"def",
+				"def_type"
+			],
+			[
+				"inf",
+				"inf_vector"
+			],
+			[
+				"sup",
+				"sup_vector"
+			],
+			[
+				"T",
+				"THETA_STEP"
+			],
+			[
+				"THE",
+				"THETA_STEP"
+			],
+			[
+				"TE",
+				"THETA_LIMIT"
+			],
+			[
+				"P",
+				"PHI_STEP"
+			],
+			[
+				"PHI",
+				"PHI_LIMIT"
+			],
+			[
+				"INT",
+				"INIT_ANGLE"
+			],
+			[
+				"TH",
+				"THETA_STEP"
+			],
+			[
+				"setPose",
+				"setPoseJoints"
+			],
+			[
+				"set",
+				"setPoseAngles"
+			],
+			[
+				"qu",
+				"query_string"
+			],
+			[
+				"jso",
+				"jsonify"
+			],
+			[
+				"q",
+				"query"
+			],
+			[
+				"CE",
+				"CE_PIN"
+			],
+			[
+				"CS",
+				"CSN_PIN"
+			],
+			[
+				"SPI",
+				"SPICommProbe"
+			],
+			[
+				"prev",
+				"prev_state"
+			],
+			[
+				"led",
+				"ledCheckTransmission"
+			],
+			[
+				"_d",
+				"_delay_ms"
+			],
+			[
+				"tra",
+				"transmitPayload"
+			],
+			[
+				"_D",
+				"_delay_ms"
+			],
+			[
+				"_de",
+				"_delay_us"
+			],
+			[
+				"Wrie",
+				"writeReadByteSPI"
+			],
+			[
+				"dist",
+				"distance"
+			],
+			[
+				"c",
+				"city"
+			],
+			[
+				"or",
+				"origin"
+			],
+			[
+				"mi",
+				"miles_sep"
+			],
+			[
+				"ro",
+				"route_sep"
+			],
+			[
+				"to",
+				"to_sep"
+			],
+			[
+				"from",
+				"from_sep"
+			],
+			[
+				"fro",
+				"from_sep"
+			],
+			[
+				"print",
+				"print_ticket"
+			],
+			[
+				"min",
+				"min_higway"
+			],
+			[
+				"road",
+				"roads_shared"
+			],
+			[
+				"ver",
+				"vertex_list"
+			],
+			[
+				"path",
+				"path_finder"
+			],
+			[
+				"hi",
+				"high_way"
+			],
+			[
+				"Ne",
+				"Neighbour"
+			],
+			[
+				"cit",
+				"cities"
+			],
+			[
+				"ma",
+				"map_info"
+			],
+			[
+				"tes",
+				"test_track_joints_number"
+			],
+			[
+				"fixt",
+				"fixture_teardown_main_loop"
+			],
+			[
+				"SKE",
+				"skeltrack"
+			],
+			[
+				"pys",
+				"pyskeltrack"
+			],
+			[
+				"INCUL",
+				"INCLUDE_LIBUSB"
+			],
+			[
+				"conf",
+				"configurePortsForSPI"
+			],
+			[
+				"SP",
+				"SPICommProbe"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Traditional"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Script Builder"
+				]
+			],
+			[
+				"Packages/LaTeXTools/LaTeX.sublime-build",
+				"PdfLaTeX"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 357.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"bo",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"b",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"box",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"pytho",
+				"SublimeREPL: Python - RUN current file"
+			],
+			[
+				"pdb",
+				"SublimeREPL: Python - PDB current file"
+			],
+			[
+				"python",
+				"SublimeREPL: Python"
+			],
+			[
+				"",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"ss",
+				"Set Syntax: C"
+			],
+			[
+				"set si ",
+				"Preferences: Settings – Syntax Specific"
+			],
+			[
+				"ssc",
+				"Preferences: Settings – Syntax Specific"
+			],
+			[
+				"boxy",
+				"Boxy Theme: Configuration"
+			],
+			[
+				"sspy",
+				"Set Syntax: Python"
+			]
+		],
+		"width": 382.0
+	},
+	"console":
+	{
+		"height": 304.0,
+		"history":
+		[
+			"quit()",
+			"input('hello')",
+			"import this",
+			"python",
+			"clc",
+			"clear",
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/asmateus/Git/flight-stone"
+	],
+	"file_history":
+	[
+		"/home/asmateus/Git/stuff-finder-server/sfserver/configurator/urls.py",
+		"/home/asmateus/Git/stuff-finder-server/sfserver/configurator/models.py",
+		"/home/asmateus/Git/stuff-finder-server/sfserver/sfserver/settings.py",
+		"/home/asmateus/Git/stuff-finder-server/sfserver/configurator/views.py",
+		"/home/asmateus/Git/stuff-finder-server/sfserver/sfserver/urls.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/snippets/urls.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/snippets/views.py",
+		"/home/asmateus/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+		"/home/asmateus/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/home/asmateus/Git/stuff-finder-server/sf.sublime-project",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/snippets/models.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/snippets/serializers.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/tutorial/settings.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/tutorial/urls.py",
+		"/home/asmateus/Documents/Other/djangorest-tutorial/tutorial/snippets/urls.py}",
+		"/home/asmateus/Documents/Other/.carta.tex",
+		"/home/asmateus/Git/stuff-finder-server/.gitignore",
+		"/home/asmateus/Git/fics-client/ficsclient/ficsclient/urls.py",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/views.py",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/static/playground/navbar.css",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/templates/playground/index.html",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/apps.py",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/models.py",
+		"/home/asmateus/Git/fics-client/ficsclient/ficsclient/settings.py",
+		"/home/asmateus/Git/fics-client/ficsclient/manage.py",
+		"/home/asmateus/Git/fics-client/ficsclient/playground/urls.py",
+		"/home/asmateus/Git/fics-client/temp",
+		"/home/asmateus/Downloads/Scripts/secret_key_generation.py",
+		"/home/asmateus/Git/ennen-website/.gitignore",
+		"/home/asmateus/.config/sublime-text-3/Packages/SublimeREPL/SublimeREPL.sublime-settings",
+		"/home/asmateus/Git/emily/emily/userexperience/shell_instance.py",
+		"/home/asmateus/Git/deadly-space-adventures/.gitignore",
+		"/home/asmateus/Documents/Other/CVK/Europass CV/europass-karolay-eng.tex",
+		"/home/asmateus/Documents/Other/CVK/Europass CV/europasscv-karolay.tex",
+		"/home/asmateus/Documents/Other/CVK/Europass CV/europasscv.cls",
+		"/home/asmateus/Documents/Other/CVK/Europass CV/europasscv_es.def",
+		"/home/asmateus/Documents/Other/CVK/Europass CV/europasscv_en.def",
+		"/home/asmateus/rails/blog/app/views/articles/index.html.erb",
+		"/home/asmateus/rails/blog/config/routes.rb",
+		"/home/asmateus/rails/blog/app/views/articles/testing.html.erb",
+		"/home/asmateus/Git/Hackathon/piti/scripty.py",
+		"/home/asmateus/Git/Hackathon/hackaton/config/routes.rb",
+		"/home/asmateus/Git/Hackathon/piti/data_generator.py",
+		"/home/asmateus/rails/blog/app/controllers/articles_controller.rb",
+		"/home/asmateus/rails/scripty.py",
+		"/home/asmateus/rails/blog/app/models/article.rb",
+		"/home/asmateus/rails/blog/app/controllers/application_controller.rb",
+		"/home/asmateus/Git/Hackathon/hackaton/app/assets/stylesheets/application.scss",
+		"/home/asmateus/Git/Hackathon/hackaton/app/views/main/index.html.erb",
+		"/home/asmateus/Git/Hackathon/hackaton/Gemfile",
+		"/home/asmateus/rails/blog/app/assets/stylesheets/application.scss",
+		"/home/asmateus/Git/Hackathon/hackaton/app/assets/stylesheets/application.sass",
+		"/home/asmateus/rails/blog/Gemfile",
+		"/home/asmateus/Documents/Uni/hackaton/sniffer.py",
+		"/home/asmateus/rails/blog/app/views/articles/show.html.erb",
+		"/home/asmateus/rails/blog/app/views/comments/_form.html.erb",
+		"/home/asmateus/rails/blog/app/views/comments/_comment.html.erb",
+		"/home/asmateus/rails/blog/app/controllers/comments_controller.rb",
+		"/home/asmateus/rails/blog/.gitignore",
+		"/home/asmateus/rails/blog/db/schema.rb",
+		"/home/asmateus/rails/blog/app/views/articles/edit.html.erb",
+		"/home/asmateus/rails/blog/app/views/articles/new.html.erb",
+		"/home/asmateus/rails/blog/app/views/articles/_form.html.erb",
+		"/home/asmateus/rails/blog/app/views/welcome/index.html.erb",
+		"/home/asmateus/rails/blog/app/controllers/welcome_controller.rb",
+		"/home/asmateus/Git/deadly-space-adventures/extra/SDL/01_hello_SDL/01_hello_SDL.cpp",
+		"/home/asmateus/Git/deadly-space-adventures/deadly-space-adventures/space_adventures.cpp",
+		"/home/asmateus/Git/deadly-space-adventures/Makefile",
+		"/home/asmateus/Documents/CV/Europass CV/europasscv-asmateus.tex",
+		"/home/asmateus/Documents/CV/Europass CV/europasscv.cls",
+		"/home/asmateus/rails/toy_app/app/controllers/application_controller.rb",
+		"/home/asmateus/rails/toy_app/config/routes.rb",
+		"/home/asmateus/Downloads/cm.py",
+		"/home/asmateus/Downloads/cnf.py",
+		"/home/asmateus/Downloads/true_val",
+		"/home/asmateus/Downloads/predicted.txt",
+		"/home/asmateus/Downloads/confidence.txt",
+		"/home/asmateus/Documents/Uni/Algo_and_Comp/Cliques/presentation/presentation.tex",
+		"/home/asmateus/Git/flight-stone/extra/nrf24l01/attiny85-test-emicion/ardu/ardu.ino",
+		"/home/asmateus/Documents/Uni/PDI/papers_for_paper/conclusions",
+		"/home/asmateus/Documents/Uni/PDI/papers_for_paper/notas",
+		"/home/asmateus/Git/flight-stone/extra/nrf24l01/attiny85-test-emicion/ardu2/ardu2_inter.ino",
+		"/home/asmateus/Git/flight-stone/extra/nrf24l01/attiny85-test-emicion/main.c",
+		"/home/asmateus/Git/flight-stone/extra/nrf24l01/attiny85-test-emicion/ardu2/ardu2.ino",
+		"/home/asmateus/Documents/Uni/Algo_and_Comp/Cliques/doc/paper.tex",
+		"/home/asmateus/Downloads/scatter3d_demo.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/core/descriptor",
+		"/home/asmateus/Documents/Uni/PDI/informe_pf/informe.tex",
+		"/home/asmateus/Documents/Uni/Estructuras/resumen/resumen.tex",
+		"/home/asmateus/Git/digital-democracy-server/server/representation/packet_codes.py",
+		"/home/asmateus/Git/digital-democracy-server/server/data/transaction_tokens.json",
+		"/home/asmateus/Git/digital-democracy-server/server/app.py",
+		"/home/asmateus/Git/digital-democracy-server/server/serial/connector.py",
+		"/home/asmateus/Git/digital-democracy-server/server/serial/security.py",
+		"/home/asmateus/Git/digital-democracy-server/server/test.py",
+		"/home/asmateus/Git/digital-democracy-server/server/core/activity_handler.py",
+		"/home/asmateus/Git/digital-democracy-server/server/data/walls_db.json",
+		"/home/asmateus/Git/digital-democracy-server/server/data/chats_db.json",
+		"/home/asmateus/Git/digital-democracy-server/server/data/community_db.json",
+		"/home/asmateus/Git/digital-democracy-server/server/data/user_db.json",
+		"/home/asmateus/Git/digital-democracy-server/server/io/__init__.py",
+		"/home/asmateus/Git/digital-democracy-server/server/io/user.py",
+		"/home/asmateus/Git/digital-democracy-server/server/io/connector.py",
+		"/home/asmateus/Git/digital-democracy-server/.gitignore",
+		"/home/asmateus/Git/digital-democracy-server/server/io/security.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/utils/definitions.py",
+		"/home/asmateus/Git/digital-democracy-server/server/core/login_handler.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/py-serial/Send2DB.py",
+		"/home/asmateus/Git/digital-democracy-server/server/packet_codes.py",
+		"/home/asmateus/Git/digital-democracy-server/packet_codes.py",
+		"/home/asmateus/Git/digital-democracy-server/app.py",
+		"/home/asmateus/Git/digital-democracy-server/data/db.json",
+		"/home/asmateus/Git/digital-democracy-server/democracy.wsgi",
+		"/home/asmateus/Git/digital-democracy-server/__init__.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/py-serial/connector.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/py-serial/__init__.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/utils/angle_calculator.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/utils/__init__.py",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/serial/Joints.cpp",
+		"/home/asmateus/Git/taolu-enhancer/taolu-enhancer/serial/Joints.h",
+		"/home/asmateus/Documents/Uni/Estructuras/pc/entrega_final/final_estructuras/punto5/punto5.py",
+		"/home/asmateus/Documents/Uni/Estructuras/pc/punto5.py",
+		"/home/asmateus/Documents/Uni/Estructuras/pc/doc_1/informe.tex",
+		"/home/asmateus/Downloads/puntos/punto1.py",
+		"/home/asmateus/Documents/punto7.py",
+		"/home/asmateus/Documents/Uni/Cultura/Parcial_2/informe.tex",
+		"/home/asmateus/Documents/Uni/Cultura/Parcial_1/doc/ensayo_andres_simancas_mateus.tex",
+		"/home/asmateus/Documents/Uni/Estructuras/pc/punto5_op.py"
+	],
+	"find":
+	{
+		"height": 48.0
+	},
+	"find_in_files":
+	{
+		"height": 132.0,
+		"where_history":
+		[
+			"/home/asmateus/Git/skeltrack",
+			"/home/asmateus/Git/PySkeltrack",
+			"/home/asmateus/Git/PySkeltrack/pyskeltrack"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"    ",
+			";",
+			"public static final int ",
+			"        ",
+			"SET_DEFAULT",
+			"add_auto_now",
+			"Curriculum",
+			")",
+			"t(",
+			"))",
+			" = ",
+			"5",
+			"3",
+			"5",
+			"4",
+			"A",
+			"TOK",
+			" ",
+			"[",
+			"2.\t",
+			"10. ",
+			".  ",
+			". ",
+			"--------------------------------------------------------------------------------------------------------------------------------",
+			"-------------------------------------------------------------------------------------------------------------------------------",
+			"------------------------------------------------------------------------------------------------------------------------------",
+			"Forma",
+			"node",
+			"{$",
+			"    ",
+			"        ",
+			"       ",
+			"      ",
+			"     ",
+			"    ",
+			"sys",
+			"CON",
+			"ACCESS_",
+			"PCK",
+			"=",
+			";",
+			"public static final int ",
+			"1143387706",
+			"\"community\"",
+			"\"2011",
+			"public static final int ",
+			"))",
+			"superior",
+			"x",
+			"#define ",
+			"NUI_",
+			"    ",
+			",",
+			"2.7+",
+			"l",
+			"d",
+			"i",
+			"yellow",
+			"red",
+			".\n",
+			"}\n",
+			"miles_sep",
+			"route_sep",
+			"to_sep",
+			"from_sep",
+			"Neighbour",
+			"neighbour_list",
+			"track_joints_mutex",
+			"reduce_depth_file",
+			"read_file_to_buffer",
+			"reduce_factor",
+			"r_height",
+			"r_width",
+			"  ",
+			"fixture_setup",
+			"  ",
+			"RESOURCES_FOLDER",
+			"/skeltrack/skeleton/",
+			"track_joints_number",
+			"(\"/skeltrack/skeleton/track_joints_number",
+			"/skeltrack/skeleton/",
+			"track_joints_number",
+			"g_simple_async_result_get_op_res_gpointer",
+			"g_simple_async_result_propagate_error",
+			"g_simple_async_result_set_error",
+			"g_simple_async_result_new",
+			"g_simple_async_result_set_op_res_gpointer",
+			"glib",
+			"DEPTH_FILES",
+			"main",
+			"gnh",
+			"gnl",
+			"traverse"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 44.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 338.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.latextools":
+	{
+		"height": 118.0
+	},
+	"output.unsaved_changes":
+	{
+		"height": 118.0
+	},
+	"pinned_build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
+	"project": "fstone.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 260.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
