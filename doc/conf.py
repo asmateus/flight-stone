@@ -39,7 +39,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+# templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -52,8 +52,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'FlightStone'
-copyright = '2017, Andrés Jorge'
-author = 'Andrés Jorge'
+copyright = '2017, A. S. Mateus & J. O. Pacheco'
+author = 'A. S. Mateus & J. O. Pacheco'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -172,6 +172,3 @@ texinfo_documents = [
      author, 'FlightStone', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
