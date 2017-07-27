@@ -9,9 +9,10 @@ Welcome to FlightStone's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   :hidden:
 
-   Introduction
-   TODO
+   Introduction <introduction>
+   Planned Tasks <planned_tasks>
 
 
 
