@@ -19,11 +19,10 @@ def checkDevice(func):
 
 
 class Controller:
-    controller_type = GENERIC_TYPES['none']
     device = None
 
     def __init__(self, controller_type):
-        Controller.controller_type = controller_type
+        self.controller_type = controller_type
 
     def pullData(self):
         raise NotImplementedError
