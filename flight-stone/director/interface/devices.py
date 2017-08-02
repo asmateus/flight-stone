@@ -14,7 +14,7 @@ class KinectDevice:
 
 ArduinoUnoDevice = {
     'port': None,
-    'identifier': '2341:0043',
+    'identifier': '2341:0043',  # idVendor - idProduct
     'datatype': type(str),
     'baudrate': 115200,
     'language': Drony,
