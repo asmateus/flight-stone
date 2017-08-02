@@ -1,5 +1,6 @@
 from devices import ArduinoUnoDevice
-import subprocess
+from serial.tools.list_ports import comports
+import serial
 import re
 
 ROOT_DEVICE_PATH = '/dev/bus/usb/'
@@ -33,18 +34,11 @@ class Controller:
         raise NotImplementedError
 
     def deviceQuery(self):
-        df = subprocess.check_output("lsusb").decode('utf-8')
-        devices = []
-        for i in df.split('\n'):
-            if i:
-                info = DEVICE_QUERY_EXPRESSION.match(i)
-                if info:
-                    dinfo = info.groupdict()
-                    dinfo['device'] = '%s/%s' % (dinfo.pop('bus'), dinfo.pop('device'))
-                    devices.append(dinfo)
-        for i in devices:
-            if i['id'] == self.device.identifier:
-                return i['device']
+        devices = comports()
+        for d in devices:
+            if d.hwid.split('PID')[1].split()[0][1:] == self.device['identifier']:
+                self.device['port'] = d.device
+                return d.device
         return None
 
     def serialize(self, packet):
@@ -54,7 +48,8 @@ class Controller:
 class GenericMotionController(Controller):
 
     '''The GenericMotionController by default manipulates an Arduino Uno system. With drony
-    protocol language'''
+    protocol language. This class supports sudden device disconnection and immediate recovery
+    upon reconnection; special thanks to sorelyss (Github) for the code provided.'''
 
     def __init__(self):
         super(GenericMotionController, self).__init__()
@@ -63,8 +58,16 @@ class GenericMotionController(Controller):
 
     @checkDevice
     def pullData(self):
-        print('Pulling')
+        try:
+            with serial.Serial(self.device['port'], self.device['baudrate'], timeout=10) as ser:
+                while(1):
+                    print(ser.readline())
+        except Exception:
+            print('Device disconnected. Retrying...')
+            while not self.deviceQuery():
+                pass
+            self.pullData()
 
     @checkDevice
     def pushData(self):
-        print('Pushing')
+        pass
