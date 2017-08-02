@@ -5,7 +5,7 @@
     Also, only one Kinect at a time can be used. To assure that singleton pattern is enforced
     from the controller superclass
 '''
-from lang import Drony
+from interface.lang import Drony
 
 
 class KinectDevice:
