@@ -66,23 +66,34 @@ class GenericMotionController(Controller):
         self.device = device
         self.deviceQuery()
         self.controller_type = GENERIC_TYPES['motion']
+        self.ser = None
 
     @genCheckDevice
     def pullData(self):
         try:
-            with serial.Serial(self.device['port'], self.device['baudrate'], timeout=10) as ser:
-                while(1):
-                    if self.endtr:
-                        return
-                    yield ser.readline()
+            ser = serial.Serial(
+                self.device['port'],
+                self.device['baudrate'],
+                timeout=10,
+                rtscts=1)
+            while(1):
+                if self.endtr:
+                    ser.close()
+                    return
+                yield ser.readline()
         except Exception:
             print('Device disconnected. Retrying...')
 
     @checkDevice
     def pushData(self, data):
         try:
-            with serial.Serial(self.device['port'], self.device['baudrate'], timeout=10) as ser:
-                ser.write(data)
+            ser = serial.Serial(
+                self.device['port'],
+                self.device['baudrate'],
+                timeout=10000,
+                rtscts=1)
+            ser.write(data)
+            ser.close()
         except Exception:
             print('Device disconnected. No retrying on pushing...')
 

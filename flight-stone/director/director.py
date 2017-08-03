@@ -20,7 +20,8 @@ if __name__ == '__main__':
     dir_id = manager.addSubscriber(director, GENERIC_TYPES['motion'])
     con_id = manager.addController(controller)
 
-    manager.readController(con_id)
-    time.sleep(15)
-    print('ending')
-    manager.stopReading(con_id)
+    # manager.readController(con_id)
+
+    for i in range(1000):
+        manager.writeController(con_id, 'Hello, buddy!'.encode('utf-8'))
+        time.sleep(3)

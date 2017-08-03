@@ -91,7 +91,7 @@ class IOManager():
 
     def writeController(self, controller_id, data):
         if IOManager.instance:
-            for stamp_index in range(IOManager.instance.controllers):
+            for stamp_index in range(len(IOManager.instance.controllers)):
                 controller, stamp_id, action = IOManager.instance.controllers[stamp_index]
                 if stamp_id == controller_id:
                     controller.pushData(data)
