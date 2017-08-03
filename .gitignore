@@ -12,6 +12,11 @@
 *.sublime-project
 *.sublime-workspace
 
+# ***********
+# Local tests
+# ***********
+extra/local_tests/*
+
 # ********************************
 # Python related files and folders
 # ********************************
