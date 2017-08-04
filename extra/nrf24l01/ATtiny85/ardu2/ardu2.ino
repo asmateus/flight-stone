@@ -56,8 +56,8 @@ void loop()
 {
   //receiver();
   sender();
-  Serial.print("CONFIG: ");
-  Serial.println(GetReg(CONFIG));
+  //Serial.print("CONFIG: ");
+  //Serial.println(GetReg(CONFIG));
   
 }
 
@@ -185,7 +185,7 @@ void nrf24L01_init(void)
   uint8_t val[5]; 
 
  
-  val[0]=0x01; 
+  val[0]=0x00; 
   WriteToNrf(W, EN_AA, val, 1); 
   
   val[0]=0x06;
