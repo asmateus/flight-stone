@@ -20,9 +20,7 @@ def serialWriteReadTest():
 
     manager.readController(con_id)
 
-    for i in range(100):
-        #manager.writeController(con_id, 'Hello, buddy!'.encode('utf-8'))
-        time.sleep(3)
+    time.sleep(100)
 
     manager.stopReading()
     manager.removeSubscriber(dir_id)

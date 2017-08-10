@@ -17,7 +17,38 @@ _Language = namedtuple('Language', ['datatype', 'structure', 'word_size', 'verbs
 Drony = _Language(
     datatype=str,
     structure=r'?<><><>',
-    word_size=32,
-    verbs=('mov', 'sta', 'pff', 'pon', 'rot'),
-    adjectives=('lft', 'rht', 'up', 'dwn', 'sus', 'smt'),
-    )
+    word_size=8,
+    verbs=('m', 's', 'f', 'o', 'r'),
+    adjectives=('l', 'r', 'u', 'd', '1',
+                '2', '3', '4', '5', '6', '7', '8', '9', '0'),
+)
+
+
+class DronyManager:
+    def __init__(self):
+        self.persistent_adjective = '125'
+        self.language = Drony
+        self.keys = ['a', 'w', 's', 'd', 'o', 'u', 'h', 'j', 'k',
+                     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+        self.drony_val = ['ml', 'mu', 'md', 'mr', 's', 'ru', 'rl', 'rd', 'rr',
+                          '', '', '', '', '', '', '', '', '', '']
+        self.associator = {k: v for (k, v) in zip(self.keys, self.drony_val)}
+
+    def manage(self, ch):
+        word = ''
+        try:
+            word_root = self.associator[ch]
+            if not word_root:
+                level = str(self.translateIntensityLevel(ch))
+                self.persistent_adjective = '0' * (3 - len(level)) + level
+            else:
+                word = word_root + self.persistent_adjective
+                instr_count = len(word)
+                word = str(instr_count) + word + '#' * (8 - 1 - len(word))
+        except Exception:
+            pass
+
+        return word
+
+    def translateIntensityLevel(self, ch):
+        return int(int(ch) * 255 / 9)
