@@ -19,3 +19,11 @@ ArduinoUnoDevice = {
     'baudrate': 115200,
     'language': Drony,
 }
+
+ArduinoMegaDevice = {
+    'port': None,
+    'identifier': '2341:0042',  # idVendor - idProduct
+    'datatype': type(str),
+    'baudrate': 115200,
+    'language': Drony,
+}

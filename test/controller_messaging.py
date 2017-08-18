@@ -3,6 +3,7 @@ import path_appending
 from entities import Director
 from iomanager import IOManager
 from interface.controllers import GenericMotionController, GENERIC_TYPES
+from interface.devices import ArduinoMegaDevice
 from events.keyboard import KeyboardListener
 import argparse
 import time
@@ -11,7 +12,7 @@ import sys
 
 def serialWriteReadTest():
     manager = IOManager().getInstance()
-    controller = GenericMotionController()
+    controller = GenericMotionController(ArduinoMegaDevice)
 
     director = Director()
 
@@ -22,7 +23,7 @@ def serialWriteReadTest():
 
     time.sleep(100)
 
-    manager.stopReading()
+    manager.stopReading(con_id)
     manager.removeSubscriber(dir_id)
 
 
@@ -35,7 +36,7 @@ def simpleKeyboardEventTest():
 
 def keyboardEventTest():
     manager = IOManager().getInstance()
-    controller = GenericMotionController()
+    controller = GenericMotionController(ArduinoMegaDevice)
 
     director = Director()
 
@@ -70,7 +71,7 @@ if __name__ == '__main__':
             print('Test', test_mode, 'does not exist.')
             sys.exit()
 
-        try:
-            test()
-        except Exception:
-            print('Error in function')
+        #try:
+        test()
+        #except Exception:
+        #    print('Error in function')

@@ -152,32 +152,6 @@ class Drone{
 
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 int level = 0;
 int cycle = 0;
@@ -205,20 +179,4 @@ void Syncronize(int channel){
 }
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif

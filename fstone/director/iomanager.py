@@ -53,7 +53,7 @@ class IOManager():
                     i = id_index
                     break
             if i is not -1:
-                IOManager.instance.subscribers.remove(i)
+                del IOManager.instance.subscribers[i]
 
     def generateUniqueID(self, ids):
         return max(ids) + 1
