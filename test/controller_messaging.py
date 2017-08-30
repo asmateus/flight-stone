@@ -6,7 +6,6 @@ from interface.controllers import GenericMotionController, GENERIC_TYPES
 from interface.devices import ArduinoMegaDevice
 from events.keyboard import KeyboardListener
 import argparse
-import time
 import sys
 
 
@@ -16,15 +15,10 @@ def serialWriteReadTest():
 
     director = Director()
 
-    dir_id = manager.addSubscriber(director, GENERIC_TYPES['motion'])
+    manager.addSubscriber(director, GENERIC_TYPES['motion'])
     con_id = manager.addController(controller)
 
     manager.readController(con_id)
-
-    time.sleep(100)
-
-    manager.stopReading(con_id)
-    manager.removeSubscriber(dir_id)
 
 
 def simpleKeyboardEventTest():
@@ -71,7 +65,7 @@ if __name__ == '__main__':
             print('Test', test_mode, 'does not exist.')
             sys.exit()
 
-        #try:
-        test()
-        #except Exception:
-        #    print('Error in function')
+        try:
+            test()
+        except Exception:
+            print('Error in function')
