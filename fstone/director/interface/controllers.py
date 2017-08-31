@@ -1,5 +1,6 @@
 from serial.tools.list_ports import comports
 from interface.devices import ArduinoUnoDevice
+from interface.responses import IOResponse, RESPONSE_STATUS
 import serial
 
 GENERIC_TYPES = {
@@ -68,6 +69,9 @@ class GenericMotionController(Controller):
         self.controller_type = GENERIC_TYPES['motion']
         self.ser = None
 
+        # Initialize the response instance
+        self.response = IOResponse(self.controller_type)
+
     @genCheckDevice
     def pullData(self):
         try:
@@ -76,11 +80,13 @@ class GenericMotionController(Controller):
                 self.device['baudrate'],
                 timeout=10,
                 rtscts=1)
-            while(1):
+            while True:
                 if self.endtr:
                     ser.close()
                     return
-                yield ser.readline()
+                self.response.assignStatus(RESPONSE_STATUS['OK'])
+                self.response.assignData(ser.readline())
+                yield self.response
         except Exception:
             print('Device disconnected. Retrying...')
 

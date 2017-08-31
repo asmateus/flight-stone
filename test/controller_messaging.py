@@ -1,11 +1,15 @@
 import path_appending
 
-from entities import Director
+from entities import UserDirector, UIDirector
 from iomanager import IOManager
 from interface.controllers import GenericMotionController, GENERIC_TYPES
+from interface.custom_controllers import LocalVideoController, CUSTOM_TYPES
 from interface.devices import ArduinoMegaDevice
 from events.keyboard import KeyboardListener
+from ui.minimal import Application as App
+from tkinter import Tk
 import argparse
+import traceback
 import sys
 
 
@@ -13,7 +17,7 @@ def serialWriteReadTest():
     manager = IOManager().getInstance()
     controller = GenericMotionController(ArduinoMegaDevice)
 
-    director = Director()
+    director = UserDirector()
 
     manager.addSubscriber(director, GENERIC_TYPES['motion'])
     con_id = manager.addController(controller)
@@ -22,7 +26,7 @@ def serialWriteReadTest():
 
 
 def simpleKeyboardEventTest():
-    director = Director()
+    director = UserDirector()
     listener = KeyboardListener()
     listener.addSubscriber(director)
     listener.startListener()
@@ -32,7 +36,7 @@ def keyboardEventTest():
     manager = IOManager().getInstance()
     controller = GenericMotionController(ArduinoMegaDevice)
 
-    director = Director()
+    director = UserDirector()
 
     listener = KeyboardListener()
     listener.addSubscriber(director)
@@ -42,6 +46,35 @@ def keyboardEventTest():
     con_id = manager.addController(controller)
 
     director.assignExtendedController(con_id, manager)
+
+
+def localVideoTest():
+    manager = IOManager().getInstance()
+    controller = LocalVideoController()
+
+    # In this case the director required is a UI director
+    director = UIDirector()
+
+    # Application instance to display the image
+    tk_controller = Tk()
+    application = App(tk_controller)
+
+    # UI directors require that an application instance is passed to them, and it must implement
+    # the updateVideoState method
+    director.assignApplicationInstance(application)
+
+    manager.addSubscriber(director, CUSTOM_TYPES['local_video'])
+    con_id = manager.addController(controller)
+
+    manager.readController(con_id)
+
+    while True:
+        if application.status:
+            application.updateVideoHolder()
+            application.update()
+            application.update_idletasks()
+        else:
+            break
 
 
 if __name__ == '__main__':
@@ -54,6 +87,7 @@ if __name__ == '__main__':
         'keyboard': simpleKeyboardEventTest,
         'keytocontroller': keyboardEventTest,
         'serial': serialWriteReadTest,
+        'localv': localVideoTest,
     }
 
     if not test_mode:
@@ -68,4 +102,4 @@ if __name__ == '__main__':
         try:
             test()
         except Exception:
-            print('Error in function')
+            traceback.print_exc(file=sys.stdout)

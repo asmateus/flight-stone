@@ -16,6 +16,7 @@
 # Local tests
 # ***********
 extra/local_tests/*
+*.mp4
 
 # ********************************
 # Python related files and folders

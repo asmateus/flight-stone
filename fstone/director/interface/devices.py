@@ -8,9 +8,13 @@
 from interface.lang import Drony
 
 
-class KinectDevice:
-    pass
-
+LocalDevice = {
+    'port': '/home/asmateus/Git/flight-stone/extra/',
+    'identifier': 'drone_flying_scaled.mp4',
+    'datatype': type(bytes),
+    'baudrate': 640 * 480 * 3,
+    'language': None,
+}
 
 ArduinoUnoDevice = {
     'port': None,

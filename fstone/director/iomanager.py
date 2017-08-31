@@ -11,6 +11,7 @@ from threading import Thread
 class IOManager():
     # Unique buffer instance
     instance = None
+    READ_RECURSION_DEPTH = 10
 
     @staticmethod
     def getInstance():
@@ -22,6 +23,7 @@ class IOManager():
     def __init__(self):
         self.controllers = []
         self.subscribers = []
+        self.current_read_depht = 0
 
     def __call__(self):
         pass
@@ -111,4 +113,8 @@ class IOManager():
                 while not controller.deviceQuery():
                     if controller.endtr:
                         return
-                IOManager.instance._read(controller, stamp_index)
+                if IOManager.instance.current_read_depht < IOManager.READ_RECURSION_DEPTH + 1:
+                    IOManager.instance.current_read_depht += 1
+                    IOManager.instance._read(controller, stamp_index)
+                else:
+                    print('FATAL: maximum recursion reached. Dropping thread')
