@@ -1,12 +1,10 @@
-import path_appending
-
 from entities import UserDirector, UIDirector
 from iomanager import IOManager
-from interface.controllers import GenericMotionController, GENERIC_TYPES
-from interface.custom_controllers import LocalVideoController, CUSTOM_TYPES
-from interface.devices import ArduinoMegaDevice
+from representation.controllers import GenericMotionController, GENERIC_TYPES
+from representation.custom_controllers import LocalVideoController, CUSTOM_TYPES
+from representation.devices import ArduinoMegaDevice
 from events.keyboard import KeyboardListener
-from ui.minimal import Application as App
+from interface.minimal import Application as App
 from tkinter import Tk
 import argparse
 import traceback

@@ -1,5 +1,5 @@
-from interface.controllers import GENERIC_TYPES
-from interface.custom_controllers import CUSTOM_TYPES
+from representation.controllers import GENERIC_TYPES
+from representation.custom_controllers import CUSTOM_TYPES
 
 RESPONSE_TYPES = {**GENERIC_TYPES, **CUSTOM_TYPES}
 

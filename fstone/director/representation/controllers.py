@@ -1,6 +1,6 @@
 from serial.tools.list_ports import comports
-from interface.devices import ArduinoUnoDevice
-from interface.responses import IOResponse, RESPONSE_STATUS
+from representation.devices import ArduinoUnoDevice
+from representation.responses import IOResponse, RESPONSE_STATUS
 import serial
 
 GENERIC_TYPES = {
@@ -65,6 +65,7 @@ class GenericMotionController(Controller):
         super(GenericMotionController, self).__init__()
 
         self.device = device
+        self.lang = self.device['language']()
         self.deviceQuery()
         self.controller_type = GENERIC_TYPES['motion']
         self.ser = None
@@ -98,7 +99,10 @@ class GenericMotionController(Controller):
                 self.device['baudrate'],
                 timeout=10000,
                 rtscts=1)
-            ser.write(data)
+            data = self.lang.manage(data)
+            if data:
+                print(data)
+                ser.write(data.encode('utf8'))
             ser.close()
         except Exception:
             print('Device disconnected. No retrying on pushing...')

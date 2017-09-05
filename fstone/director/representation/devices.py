@@ -5,14 +5,23 @@
     Also, only one Kinect at a time can be used. To assure that singleton pattern is enforced
     from the controller superclass
 '''
-from interface.lang import Drony
+from representation.lang import Drony
 
 
 LocalDevice = {
-    'port': '/home/asmateus/Git/flight-stone/extra/',
+    'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
     'identifier': 'drone_flying_scaled.mp4',
     'datatype': type(bytes),
-    'baudrate': 640 * 480 * 3,
+    'baudrate': (480, 640, 3),
+    'language': None,
+}
+
+
+LocalDeviceHQ = {
+    'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
+    'identifier': 'drone_flying.mp4',
+    'datatype': type(bytes),
+    'baudrate': (1080, 1920, 3),
     'language': None,
 }
 

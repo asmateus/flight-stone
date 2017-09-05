@@ -52,6 +52,7 @@ _DronyLangDef = _Language(
         'd': 's',
         'f': 'u',
         'b': 'j',
+        's': 'o',
     },
 )
 
@@ -67,17 +68,23 @@ class Drony:
         by specifing them in the fixed relations array.
     '''
 
-    DEF_PERSISTENT_ADJECTIVE = 125
+    DEF_PERSISTENT_ADJECTIVE = '072'
     LANG = _DronyLangDef
     FIXED_RELATIONS = {
-        'mr': 255,
-        'ml': 255,
-        'mf': 255,
-        'mb': 255,
+        'mr': '048',
+        'ml': '048',
+        'mf': '048',
+        'mb': '048',
     }
+    EXCLUDED_RELATIONS = [
+        'ru', 'rd', 'rf', 'rb', 'sl', 'sr', 'su', 'sd', 'sb', 'sf'
+    ]
+    OBLIGATORY_RELATIONS = ['ss']
 
     def __init__(self):
         mov = [''.join(m) for m in itertools.product(Drony.LANG.verbs, Drony.LANG.adjectives)]
+        mov = [i for i in mov if i not in Drony.EXCLUDED_RELATIONS]
+        mov.extend(Drony.OBLIGATORY_RELATIONS)
         self.associator = {
             k: v for (k, v) in zip(Drony.LANG.triggers, mov)
             if k in Drony.LANG.v_mapping[v[0]] and k in Drony.LANG.a_mapping[v[1]]
@@ -105,4 +112,4 @@ class Drony:
         return word
 
     def translateIntensityLevel(self, ch):
-        return int(int(ch) * 159 / 9)
+        return int(int(ch) * (160 - 88) / 9)

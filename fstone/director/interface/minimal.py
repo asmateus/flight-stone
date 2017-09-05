@@ -4,9 +4,9 @@ import tkinter as tk
 
 class Application(tk.Frame):
     def __init__(self, master):
-        super().__init__(master, width=700, height=500, bg='white')
-        self.width = 700
-        self.height = 500
+        super().__init__(master, width=640, height=480, bg='white')
+        self.width = 640
+        self.height = 480
 
         # Associate application root to main controller
         self.root = master
@@ -38,9 +38,6 @@ class Application(tk.Frame):
         if not self.img_update:
             self.last_frame = frame
             self.img_update = True
-
-    def buttonClick(self):
-        print('CLICKED')
 
     def on_quit(self):
         self.status = False

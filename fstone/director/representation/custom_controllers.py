@@ -1,8 +1,8 @@
 '''Non generic controllers here. '''
-from interface.controllers import Controller
-from interface.controllers import genCheckDevice
-from interface.devices import LocalDevice
-from interface.responses import IOResponse, RESPONSE_STATUS
+from representation.controllers import Controller
+from representation.controllers import genCheckDevice
+from representation.devices import LocalDevice
+from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
 import subprocess as sp
 import numpy as np
@@ -60,13 +60,13 @@ class LocalVideoController(Controller):
                         self.pipe.close()
                         return
 
-                    # Slow video to a good rate
-                    sleep(0.05)
-                    frame = self.pipe.stdout.read(self.device['baudrate'])
+                    # Slow video to a good rate, for streaming to a person
+                    sleep(0.03)
+                    frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
                     self.pipe.stdout.flush()
 
                     frame = np.fromstring(frame, dtype='uint8')
-                    frame = frame.reshape((480, 640, 3))
+                    frame = frame.reshape(self.device['baudrate'])
 
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
