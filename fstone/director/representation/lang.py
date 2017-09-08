@@ -74,7 +74,7 @@ class Drony:
         'mr': '048',
         'ml': '048',
         'mf': '048',
-        'mb': '048',
+        'mb': '080',
     }
     EXCLUDED_RELATIONS = [
         'ru', 'rd', 'rf', 'rb', 'sl', 'sr', 'su', 'sd', 'sb', 'sf'

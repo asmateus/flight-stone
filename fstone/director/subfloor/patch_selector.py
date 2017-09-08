@@ -1,13 +1,9 @@
-from subfloor.features import ColorHistogram, SIFTExtractor
+from subfloor.features import ColorHistogramExtractor, SIFTExtractor
 from interface.patch_selector_ui import PatchSelectorApp as App
-from collections import namedtuple
 from tkinter import Tk
 import pickle
-import PIL
-import numpy as np
 import os
 
-Patch = namedtuple('Patch', ['name', 'origin', 'w', 'h', 'patch', 'descriptions'])
 PTH = os.path.dirname(os.path.abspath(__file__)).split('fstone')[0]
 
 
@@ -20,8 +16,18 @@ def checkAccess(func):
     return check
 
 
+class Patch:
+    def __init__(self, name='', origin='', p1=(0, 0), p2=(0, 0), patch=None, descriptions=[]):
+        self.name = name
+        self.origin = origin
+        self.p1 = p1
+        self.p2 = p2
+        self.patch = patch
+        self.descriptions = descriptions
+
+
 class PatchSelectorManager:
-    DEFAULT_DESCRIPTOR = (ColorHistogram(), SIFTExtractor())
+    DEFAULT_DESCRIPTOR = (ColorHistogramExtractor(), SIFTExtractor())
     PERSISTENT_COPY_PATH = PTH + 'fstone/director/subfloor/seeds/'
     INTERACTION_METHODS = {
         'terminal': 1,
@@ -35,15 +41,13 @@ class PatchSelectorManager:
         if interaction_method:
             self.method = interaction_method
 
+        # Choose descriptors
+        self.descriptors = list()
+
         # Instance the target patch of the image
-        self.patch = Patch(
-            name='',
-            origin='',
-            w=0,
-            h=0,
-            patch=None,
-            descriptions=()
-        )
+        self.patch = Patch()
+        self.source_image = None
+        self.image_sample = None
 
         dispatcher = {
             PatchSelectorManager.INTERACTION_METHODS['terminal']: self.performFullDemand,
@@ -58,12 +62,26 @@ class PatchSelectorManager:
     def performFullDemand(self):
         print('Perfom Full Demand')
 
+    def assignDescriptor(self, descriptor):
+        for i in self.descriptors:
+            if str(i) == str(descriptor):
+                return
+        self.descriptors.append(descriptor)
+
+    def removeDescriptor(self, str_descriptor):
+        boo = False
+        j = 0
+        for i in range(self.descriptors):
+            if str(self.descriptors.get(i)) == str_descriptor:
+                boo = True
+                j = i
+                break
+        if boo:
+            self.descriptors.remove(j)
+
     def launchInteractiveUI(self):
         tk_controller = Tk()
-        application = App(tk_controller)
-        img = PIL.Image.open('/home/asmateus/Git/flight-stone/extra/example_videos/001.jpg')
-        arr = np.array(img)
-        application.updateVideoState(arr)
+        application = App(tk_controller, self)
 
         while True:
             if application.status:
@@ -73,8 +91,32 @@ class PatchSelectorManager:
             else:
                 break
 
+    def assignSourceImage(self, img, pth):
+        self.patch.origin = pth
+        self.source_image = img
+
+    def samplePatchFromImage(self, p1, p2):
+        self.patch.p1 = p1
+        self.patch.p2 = p2
+
+        max_x = max(p1.x, p2.x)
+        min_x = min(p1.x, p2.x)
+
+        max_y = max(p1.y, p2.y)
+        min_y = min(p1.y, p2.y)
+
+        if self.source_image is not None:
+            self.image_sample = self.source_image[min_y:max_y, min_x:max_x]
+            self.patch.patch = self.image_sample
+
+    def triggerFeatureExtraction(self):
+        return 'Extracting features'
+
     def allowInteractiveCalls(self):
         print('Interactive Calls')
+
+    def getPatchInstance(self):
+        return self.patch
 
     def generatePersistentCopy(self):
         print(PatchSelectorManager.PERSISTENT_COPY_PATH)

@@ -31,7 +31,8 @@ class UserDirector(_Director):
     def manageIOResponse(self, response):
         if response.getType() == RESPONSE_TYPES['motion']:
             self.last_response = response.getData().decode('utf-8')
-            print('Controller says:', self.last_response)
+            if self.last_response != '':
+                print('Controller says:', self.last_response)
 
     def manageEventResponse(self, ev_type, rs):
         if self.extended_manager:

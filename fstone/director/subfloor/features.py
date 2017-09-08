@@ -3,6 +3,12 @@ class SIFTExtractor:
         return 'SIFT Extractor'
 
 
-class ColorHistogram:
+class ColorHistogramExtractor:
     def __str__(self):
         return 'Color Histogram Extractor'
+
+
+DESCRIPTOR_LIST = {
+    'SIFT': SIFTExtractor,
+    'CHD': ColorHistogramExtractor,
+}
