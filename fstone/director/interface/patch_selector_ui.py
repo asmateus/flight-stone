@@ -1,7 +1,7 @@
 from PIL import Image, ImageTk, ImageDraw
 from collections import namedtuple
 from tkinter import filedialog
-from subfloor.features import DESCRIPTOR_LIST
+from core.features import DESCRIPTOR_LIST
 import tkinter as tk
 import numpy as np
 

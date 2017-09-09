@@ -1,5 +1,6 @@
-from subfloor.features import ColorHistogramExtractor, SIFTExtractor
+from core.features import ColorHistogramExtractor, SIFTExtractor
 from interface.patch_selector_ui import PatchSelectorApp as App
+from interface.minimal import Application as MinApp
 from tkinter import Tk
 import pickle
 import os
@@ -55,7 +56,10 @@ class PatchSelectorManager:
             PatchSelectorManager.INTERACTION_METHODS['interactive']: self.allowInteractiveCalls,
         }
         # try:
-        dispatcher[self.method]()
+        self.loadPersistentCopy('pruba2')
+        self.triggerFeatureExtraction()
+        # self.displayPatch()
+        # dispatcher[self.method]()
         # except Exception:
         #    print('Error in method selected')
 
@@ -84,12 +88,15 @@ class PatchSelectorManager:
         application = App(tk_controller, self)
 
         while True:
-            if application.status:
-                application.updateVideoHolder()
-                application.update()
-                application.update_idletasks()
-            else:
-                break
+            try:
+                if application.status:
+                    application.updateVideoHolder()
+                    application.update()
+                    application.update_idletasks()
+                else:
+                    break
+            except Exception:
+                print('Application exited')
 
     def assignSourceImage(self, img, pth):
         self.patch.origin = pth
@@ -110,7 +117,9 @@ class PatchSelectorManager:
             self.patch.patch = self.image_sample
 
     def triggerFeatureExtraction(self):
-        return 'Extracting features'
+        chd = ColorHistogramExtractor()
+        des = chd.getDescription(self.patch.patch)
+        return des
 
     def allowInteractiveCalls(self):
         print('Interactive Calls')
@@ -126,6 +135,26 @@ class PatchSelectorManager:
                 'wb'
             ) as outfile:
                 pickle.dump(self.patch, outfile, pickle.HIGHEST_PROTOCOL)
+
+    def loadPersistentCopy(self, copy_name):
+        with open(PatchSelectorManager.PERSISTENT_COPY_PATH + copy_name + '.pkl', 'rb') as infile:
+            self.patch = pickle.load(infile)
+
+    def displayPatch(self):
+        tk_controller = Tk()
+        application = MinApp(tk_controller)
+        application.updateVideoState(self.patch.patch)
+
+        while True:
+            try:
+                if application.status:
+                    application.updateVideoHolder()
+                    application.update()
+                    application.update_idletasks()
+                else:
+                    break
+            except Exception:
+                print('Application exited')
 
 
 if __name__ == '__main__':
