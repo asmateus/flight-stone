@@ -29,9 +29,9 @@ _DronyLangDef = _Language(
     structure=r'[1..9]<><><>[1..255]###',
     word_size=8,
     triggers=(
-        'a', 'd',  # left and right
-        'w', 's',  # up and down
-        'u', 'j',  # foward and backward
+        'd', 'a',  # left and right
+        'u', 'j',  # up and down
+        'w', 's',  # foward and backward
         'h', 'k',  # rotate left and right
         'o',       # start/stop toogle
         '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
@@ -41,17 +41,17 @@ _DronyLangDef = _Language(
         'l', 'r', 'u', 'd', 'f', 'b'
     ),
     v_mapping={
-        'm': 'adwsuj',
+        'm': 'daujws',
         'r': 'hk',
         's': 'o',
     },
     a_mapping={
-        'l': 'ah',
-        'r': 'dk',
-        'u': 'w',
-        'd': 's',
-        'f': 'u',
-        'b': 'j',
+        'l': 'dh',
+        'r': 'ak',
+        'u': 'u',
+        'd': 'j',
+        'f': 'w',
+        'b': 's',
         's': 'o',
     },
 )
