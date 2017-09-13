@@ -20,6 +20,9 @@ class SIFTExtractor:
 
 
 class ColorHistogramExtractor:
+    def __str__(self):
+        return 'Color Histogram Extractor'
+
     def __init__(self, fragment_size=20):
         self.fragment_size = fragment_size
         self.working_img = None
@@ -32,6 +35,18 @@ class ColorHistogramExtractor:
         self.vertical_descriptions = list()
         self.horizontal_descriptions = list()
 
+        # Initialize possible bins for histogram
+        self.bins = self.generateBins()
+
+    def generateBins(self):
+        # Each dimesion will have 50 different possible intensity values
+        dim_1 = list(range(0, 255, 5))[1:]
+        dim_2 = [i * 1000 for i in dim_1]
+        dim_3 = [i * 1000 for i in dim_2]
+
+        res_list = [i + j + k for i in dim_3 for j in dim_2 for k in dim_1]
+        return res_list
+
     def getDescription(self, tarea):
         self.working_img = tarea
 
@@ -40,16 +55,16 @@ class ColorHistogramExtractor:
         self.horizontalFragmentation()
 
         # Extract the histograms of each Fragment
-        self.extractVerticalHistograms()
-        self.extractHorizontalHistograms()
+        self.extractHistograms(self.horizontal_fragments, self.horizontal_descriptions)
+        self.extractHistograms(self.vertical_fragments, self.vertical_descriptions)
 
         print('** Vertical Descriptions **')
         for i in self.vertical_descriptions:
-            print(i)
+            print(set(i[1]))
 
         print('** Horizontal Descriptions **')
         for i in self.horizontal_descriptions:
-            print(i)
+            print(set(i[1]))
 
     @checkImg
     def verticalFragmentation(self):
@@ -120,7 +135,7 @@ class ColorHistogramExtractor:
         frag_amount_y = y // y_frag_size
         elimination_factor_y = y - y_frag_size * frag_amount_y
 
-        # Select amount to trim the image from left and right
+        # Select amount to trim the image from up and down
         if elimination_factor_y % 2:  # odd
             trim_up, trim_down = elimination_factor_y // 2 + 1, elimination_factor_y // 2
         else:
@@ -148,43 +163,17 @@ class ColorHistogramExtractor:
                 self.horizontal_fragments.append(frag)
 
     @checkImg
-    def extractVerticalHistograms(self):
-        for fragment in self.vertical_fragments:
-            bins = range(256)
+    def extractHistograms(self, fragment_set, description_set):
+        for fragment in fragment_set:
+            r_ch = fragment.data[:, :, 0].flatten()
+            g_ch = fragment.data[:, :, 1].flatten()
+            b_ch = fragment.data[:, :, 2].flatten()
 
-            r_ch = fragment.data[:, :, 0]
-            g_ch = fragment.data[:, :, 1]
-            b_ch = fragment.data[:, :, 2]
-
-            hist_r_ch, _ = np.histogram(r_ch.flatten(), bins=bins, density=True)
-            hist_g_ch, _ = np.histogram(g_ch.flatten(), bins=bins, density=True)
-            hist_b_ch, _ = np.histogram(b_ch.flatten(), bins=bins, density=True)
-
-            hist = np.stack([hist_r_ch, hist_g_ch, hist_b_ch])
+            t_ch = r_ch * 1e6 + g_ch * 1e3 + b_ch
+            hist, binss = np.histogram(t_ch, bins=self.bins)
 
             # Append the histogram to the vertical description list, paired with its fragment
-            self.vertical_descriptions.append([fragment, hist])
-
-    @checkImg
-    def extractHorizontalHistograms(self):
-        for fragment in self.horizontal_fragments:
-            bins = range(256)
-
-            r_ch = fragment.data[:, :, 0]
-            g_ch = fragment.data[:, :, 1]
-            b_ch = fragment.data[:, :, 2]
-
-            hist_r_ch, _ = np.histogram(r_ch.flatten(), bins=bins, density=True)
-            hist_g_ch, _ = np.histogram(g_ch.flatten(), bins=bins, density=True)
-            hist_b_ch, _ = np.histogram(b_ch.flatten(), bins=bins, density=True)
-
-            hist = np.stack([hist_r_ch, hist_g_ch, hist_b_ch])
-
-            # Append the histogram to the horizontal description list, paired with its fragment
-            self.horizontal_descriptions.append([fragment, hist])
-
-    def __str__(self):
-        return 'Color Histogram Extractor'
+            description_set.append([fragment, hist])
 
 
 DESCRIPTOR_LIST = {
