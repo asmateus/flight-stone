@@ -58,13 +58,7 @@ class ColorHistogramExtractor:
         self.extractHistograms(self.horizontal_fragments, self.horizontal_descriptions)
         self.extractHistograms(self.vertical_fragments, self.vertical_descriptions)
 
-        print('** Vertical Descriptions **')
-        for i in self.vertical_descriptions:
-            print(set(i[1]))
-
-        print('** Horizontal Descriptions **')
-        for i in self.horizontal_descriptions:
-            print(set(i[1]))
+        return (self.vertical_descriptions, self.horizontal_descriptions)
 
     @checkImg
     def verticalFragmentation(self):

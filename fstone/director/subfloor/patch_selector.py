@@ -55,13 +55,10 @@ class PatchSelectorManager:
             PatchSelectorManager.INTERACTION_METHODS['graphical']: self.launchInteractiveUI,
             PatchSelectorManager.INTERACTION_METHODS['interactive']: self.allowInteractiveCalls,
         }
-        # try:
-        self.loadPersistentCopy('pruba2')
-        self.triggerFeatureExtraction()
-        # self.displayPatch()
-        # dispatcher[self.method]()
-        # except Exception:
-        #    print('Error in method selected')
+        try:
+            dispatcher[self.method]()
+        except Exception:
+            print('Error in method selected')
 
     def performFullDemand(self):
         print('Perfom Full Demand')
@@ -117,9 +114,9 @@ class PatchSelectorManager:
             self.patch.patch = self.image_sample
 
     def triggerFeatureExtraction(self):
-        chd = ColorHistogramExtractor()
-        des = chd.getDescription(self.patch.patch)
-        return des
+        self.patch.descriptions = list()
+        for descriptor in self.descriptors:
+            self.patch.descriptions.append((str(descriptor), descriptor.getDescriptions()))
 
     def allowInteractiveCalls(self):
         print('Interactive Calls')
@@ -136,10 +133,6 @@ class PatchSelectorManager:
             ) as outfile:
                 pickle.dump(self.patch, outfile, pickle.HIGHEST_PROTOCOL)
 
-    def loadPersistentCopy(self, copy_name):
-        with open(PatchSelectorManager.PERSISTENT_COPY_PATH + copy_name + '.pkl', 'rb') as infile:
-            self.patch = pickle.load(infile)
-
     def displayPatch(self):
         tk_controller = Tk()
         application = MinApp(tk_controller)
@@ -155,6 +148,11 @@ class PatchSelectorManager:
                     break
             except Exception:
                 print('Application exited')
+
+    @staticmethod
+    def loadPersistentCopy(copy_name):
+        with open(PatchSelectorManager.PERSISTENT_COPY_PATH + copy_name + '.pkl', 'rb') as infile:
+            return pickle.load(infile)
 
 
 if __name__ == '__main__':
