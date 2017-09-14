@@ -165,6 +165,18 @@ class PatchSelectorApp(tk.Frame):
         )
         self.save_patch.place(x=740, y=220)
 
+        # Set default descriptor
+        self.default_patch_var = tk.IntVar()
+        self.default_patch = tk.Checkbutton(
+            self.root,
+            text='Set as default patch',
+            variable=self.default_patch_var,
+            bg='white',
+            borderwidth=0,
+            highlightthickness=0
+        )
+        self.default_patch.place(x=650, y=260)
+
         # Rectangle selection info
         self.general_info_string = tk.StringVar()
         self.general_info = tk.Label(
@@ -293,7 +305,7 @@ class PatchSelectorApp(tk.Frame):
 
     def generateDescriptions(self):
         if self.process_status[0] and self.process_status[1] and self.process_status[2]:
-            print(self.manager.triggerFeatureExtraction())
+            self.manager.triggerFeatureExtraction()
             self.process_status[3] = 1
         self.updateInformation()
 
@@ -311,6 +323,9 @@ class PatchSelectorApp(tk.Frame):
         patch = self.manager.getPatchInstance()
         patch.name = self.patch_name_string.get()
         self.manager.generatePersistentCopy()
+
+        if self.default_patch_var.get() == 1:
+            self.manager.setAsDefaultPatch(patch.name)
 
     def updateVideoHolder(self):
         if self.img_update:
