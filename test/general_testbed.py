@@ -88,7 +88,7 @@ def trackingTest():
     director = TrackingDirector()
 
     # TrackingDirector needs a frame buffer, so we subscribe it to the manager
-    # manager.addSubscriber(director, CUSTOM_TYPES['local_video'])
+    manager.addSubscriber(director, CUSTOM_TYPES['local_video'])
 
     # We assign the controller to the manager and read it
     con_id = manager.addController(controller)

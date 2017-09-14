@@ -1,4 +1,5 @@
 from representation.controllers import GENERIC_TYPES
+from core.mechanics import TDLTracker
 from representation.custom_controllers import CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
 from utils.config import DEFAULT_CONFIGS
@@ -61,39 +62,43 @@ class UIDirector(_Director):
 
 
 class TrackingDirector(_Director):
-    STATE_UNINITIATED = 0
-    STATE_INITIATED = 1
-    STATE_INTERRUPTED = 2
-    STATE_FINISHED = 3
-
     def __init__(self, root_patch_name=''):
         super(TrackingDirector, self).__init__()
-        self.tracking_state = TrackingDirector.STATE_UNINITIATED
-        self.response_queue = list()
+        self.tracking_state = TDLTracker.STATE_UNINITIATED
+        self.mechanism = TDLTracker()
+        self.root_patch_name = root_patch_name
         self.lock = False
         self.patch = None
 
         if not root_patch_name:
-            TrackingDirector.getDefaultPatchFromConfig()
+            self.root_patch_name = DEFAULT_CONFIGS['default_patch_name']
 
     def manageIOResponse(self, response):
         if response.getType() == RESPONSE_TYPES['local_video']:
             self.last_response = response.getData()
-            self.response_queue.append(self.last_response)
             self.trackNextFrame()
 
     def trackNextFrame(self):
         if self.lock:
-            print('Tracker was called and dropped, as it is locked')
+            # print('Tracker was called and dropped, as it is locked')
             return
         else:
             self.lock = True
-            if self.patch is None:
-                self.patch = PatchSelectorManager.loadPersistentCopy()
 
-    @staticmethod
-    def getDefaultPatchFromConfig():
-        print(DEFAULT_CONFIGS)
+            # Look for base patch, either with default name or with the name received by the class
+            if self.patch is None:
+                self.patch = PatchSelectorManager.loadPersistentCopy(self.root_patch_name)
+                self.mechanism.assignRootPatch(self.patch)
+
+            # Await response from mechanism depending on the tracking state
+            response = self.mechanism.feedFrame(self.last_response, self.tracking_state)
+            self.solveIssuedResponse(response)
+
+            # Enable this method to be called again
+            # self.lock = False
+
+    def solveIssuedResponse(self, response):
+        print('Response')
 
 
 class AIDirector(_Director):
