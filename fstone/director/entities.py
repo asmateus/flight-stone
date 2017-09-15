@@ -47,7 +47,7 @@ class UserDirector(_Director):
 class UIDirector(_Director):
     def __init__(self):
         super(UIDirector, self).__init__()
-
+        self.c = 0
         self.app = None
 
     def manageIOResponse(self, response):
@@ -55,7 +55,13 @@ class UIDirector(_Director):
             self.last_response = response.getData()
             if not self.app:
                 return
-            self.app.updateVideoState(self.last_response)
+            if self.c == 0:
+                self.app.updateVideoState(self.last_response)
+                self.c = 1
+
+    def manageEventResponse(self, ev_type, rs):
+        if ev_type == 'tracking':
+            self.app.setRegionToDraw(rs[0], rs[1])
 
     def assignApplicationInstance(self, app):
         self.app = app
@@ -69,6 +75,7 @@ class TrackingDirector(_Director):
         self.root_patch_name = root_patch_name
         self.lock = False
         self.patch = None
+        self.listener = None
 
         if not root_patch_name:
             self.root_patch_name = DEFAULT_CONFIGS['default_patch_name']
@@ -77,6 +84,9 @@ class TrackingDirector(_Director):
         if response.getType() == RESPONSE_TYPES['local_video']:
             self.last_response = response.getData()
             self.trackNextFrame()
+
+    def setTrackingListener(self, listener):
+        self.listener = listener
 
     def trackNextFrame(self):
         if self.lock:
@@ -98,7 +108,7 @@ class TrackingDirector(_Director):
             # self.lock = False
 
     def solveIssuedResponse(self, response):
-        print('Response')
+            self.listener.manageEvent(response)
 
 
 class AIDirector(_Director):

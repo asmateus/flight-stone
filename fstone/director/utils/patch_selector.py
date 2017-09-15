@@ -27,6 +27,17 @@ class Patch:
         self.patch = patch
         self.descriptions = descriptions
 
+    def copy(self):
+        p = Patch()
+        p.name = self.name
+        p.origin = self.origin
+        p.p1 = self.p1
+        p.p2 = self.p2
+        p.patch = self.patch
+        p.descriptions = self.descriptions
+
+        return p
+
 
 class PatchSelectorManager:
     DEFAULT_DESCRIPTOR = (ColorHistogramExtractor(), SIFTExtractor())
