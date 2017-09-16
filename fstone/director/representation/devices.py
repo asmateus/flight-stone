@@ -7,12 +7,11 @@
 '''
 from representation.lang import Drony
 
-
 LocalDevice = {
     'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
-    'identifier': 'drone_flying_scaled.mp4',
+    'identifier': 'drone_flying_2_cut.mp4',
     'datatype': type(bytes),
-    'baudrate': (480, 640, 3),
+    'baudrate': (720, 1280, 3),
     'language': None,
 }
 

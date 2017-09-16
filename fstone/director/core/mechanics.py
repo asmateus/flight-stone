@@ -9,7 +9,11 @@
                             always madatory.
 '''
 from core.features import ColorHistogramExtractor
+from core.trackers.kcftracker import KCFTracker
+from collections import namedtuple
 import cv2
+
+Point = namedtuple('Point', ['x', 'y'])
 
 
 def checkPatch(func):
@@ -43,10 +47,13 @@ class _PatchBasedMechanics:
 
     def __init__(self, root_patch=None):
         self.root_patch = root_patch
+        self.original_patch = root_patch
         self.descriptor = None
 
     def assignRootPatch(self, patch):
         if patch.descriptions[0][0] == str(self.descriptor):
+            if self.original_patch is None:
+                self.original_patch = patch
             self.root_patch = patch
 
     def findTarget(self, obj):
@@ -58,7 +65,7 @@ class _PatchBasedMechanics:
     def getDescriptors(self):
         raise NotImplementedError
 
-    def restartDescriptors(self):
+    def restartTarget(self):
         raise NotImplementedError
 
 
@@ -80,11 +87,12 @@ class TDLTracker(_PatchBasedMechanics):
         self.match_method = cv2.TM_CCOEFF
         self.current_frame = None
         self.patch_h, self.patch_w = 0, 0
+        self.tracker = None
 
         self.dispatcher = {
             TDLTracker.STATE_UNINITIATED: self.findTarget,
             TDLTracker.STATE_INITIATED: self.updateTarget,
-            TDLTracker.STATE_INTERRUPTED: self.restartDescriptors,
+            TDLTracker.STATE_INTERRUPTED: self.findTarget,
             TDLTracker.STATE_FINISHED: self.updateTarget,
         }
 
@@ -96,6 +104,10 @@ class TDLTracker(_PatchBasedMechanics):
     def feedFrame(self, frame, external_status):
         self.current_frame = frame
         return self.dispatcher[external_status]()
+
+    def restartTarget(self):
+        self.assignRootPatch(self.original_patch)
+        self.findTarget()
 
     def findTarget(self):
         result = cv2.matchTemplate(self.current_frame, self.root_patch.patch, self.match_method)
@@ -111,10 +123,31 @@ class TDLTracker(_PatchBasedMechanics):
         patch = self.root_patch.copy()
         patch.patch = self.current_frame[
             target_top_left[1]: target_bottom_right[1] + 1,
-            target_top_left[0]: target_bottom_right[0] + 1]
+            target_top_left[0]: target_bottom_right[0] + 1, :]
+        patch.p1 = Point(x=target_top_left, y=target_bottom_right)
         self.assignRootPatch(patch)
+
+        self.tracker = KCFTracker(True, True, True)
+        self.tracker.init(
+            [target_top_left[0], target_top_left[1], self.patch_w, self.patch_h],
+            self.current_frame)
 
         return (target_top_left, target_bottom_right)
 
-    def detectObjectInFrame(self, frame, raw_object):
-        pass
+    def updateTarget(self):
+        box = self.tracker.update(self.current_frame)
+        box = [int(b) for b in box]
+        for b in box:
+            if b < 0:
+                print('ERROR')
+                return
+
+        # Update Patch with current info
+        patch = self.root_patch.copy()
+        patch.patch = self.current_frame[
+            box[1]: box[1] + box[3] + 1,
+            box[0]: box[0] + box[2] + 1, :]
+        patch.p1 = Point(x=box[0], y=box[1])
+        self.assignRootPatch(patch)
+
+        return ((box[0], box[1]), (box[0] + box[2], box[1] + box[3]))

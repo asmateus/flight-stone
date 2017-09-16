@@ -47,7 +47,6 @@ class UserDirector(_Director):
 class UIDirector(_Director):
     def __init__(self):
         super(UIDirector, self).__init__()
-        self.c = 0
         self.app = None
 
     def manageIOResponse(self, response):
@@ -55,13 +54,12 @@ class UIDirector(_Director):
             self.last_response = response.getData()
             if not self.app:
                 return
-            if self.c == 0:
-                self.app.updateVideoState(self.last_response)
-                self.c = 1
+            self.app.updateVideoState(self.last_response)
 
     def manageEventResponse(self, ev_type, rs):
         if ev_type == 'tracking':
-            self.app.setRegionToDraw(rs[0], rs[1])
+            self.app.setRegionToDraw(rs[0][0], rs[0][1])
+            self.app.updatePatchState(rs[1])
 
     def assignApplicationInstance(self, app):
         self.app = app
@@ -105,10 +103,12 @@ class TrackingDirector(_Director):
             self.solveIssuedResponse(response)
 
             # Enable this method to be called again
-            # self.lock = False
+            self.lock = False
 
     def solveIssuedResponse(self, response):
-            self.listener.manageEvent(response)
+        if response is not None:
+            self.tracking_state = TDLTracker.STATE_INITIATED
+            self.listener.manageEvent(response, self.mechanism.root_patch.patch)
 
 
 class AIDirector(_Director):

@@ -116,6 +116,7 @@ def trackingTest():
     while True:
         if application.status:
             application.updateVideoHolder()
+            application.updatePatchHolder()
             application.update()
             application.update_idletasks()
         else:
