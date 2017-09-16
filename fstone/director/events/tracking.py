@@ -8,10 +8,10 @@ class TrackingListener:
         self.subscribers = []
         self.event_type = 'tracking'
 
-    def manageEvent(self, response):
+    def manageEvent(self, response, ov):
         for subscriber_stamp in self.subscribers:
             subscriber, _ = subscriber_stamp
-            subscriber.manageEventResponse(self.event_type, response)
+            subscriber.manageEventResponse(self.event_type, [response, ov])
 
     def addSubscriber(self, subscriber):
         gen_id = 0

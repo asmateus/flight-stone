@@ -7,9 +7,9 @@ Point = namedtuple('Point', ['x', 'y'])
 
 class Application(tk.Frame):
     def __init__(self, master):
-        super().__init__(master, width=640, height=480, bg='white')
-        self.width = 640
-        self.height = 480
+        super().__init__(master, width=1280, height=720, bg='white')
+        self.width = 1280
+        self.height = 720
 
         # Associate application root to main controller
         self.root = master
@@ -19,6 +19,7 @@ class Application(tk.Frame):
         self.root.protocol('WM_DELETE_WINDOW', self.on_quit)
 
         self._video_holder = tk.Label(self)
+        self._patch_holder = tk.Label(self)
         self.pack()
 
         # The GUI initiated successfully
@@ -28,6 +29,7 @@ class Application(tk.Frame):
         self.region_to_draw = False
         self.region = (Point(x=0, y=0), Point(x=0, y=0))
         self.img_update = False
+        self.patch_update = False
         self.last_frame = None
 
     def setRegionToDraw(self, p1, p2):
@@ -48,10 +50,26 @@ class Application(tk.Frame):
             self._video_holder.config(image=self.photo)
             self._video_holder.pack()
 
+    def updatePatchHolder(self):
+        if self.patch_update:
+            self.patch_update = False
+            img = Image.fromarray(self.patch, 'RGB')
+
+            # Put the image in the label
+            self.photo = ImageTk.PhotoImage(img)
+            self._patch_holder.imgtk = self.photo
+            self._patch_holder.config(image=self.photo)
+            self._patch_holder.pack()
+
     def updateVideoState(self, frame):
         if not self.img_update:
             self.last_frame = frame
             self.img_update = True
+
+    def updatePatchState(self, patch):
+        if not self.img_update:
+            self.patch = patch
+            self.patch_update = True
 
     def applyExtraDrawings(self, img):
         if self.region_to_draw:
