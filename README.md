@@ -14,7 +14,12 @@ This repository contains the firmware of the wireless sensor network (WSN) and o
 Write here the possible uses of what we are doing
 
 ## Usage
-Usage information is rather large so, go to the source directly.
+Usage information is rather large so, go to the source directly. However, to give a taste here are the following commands:
+* To test serial communications execute `python -m test.general_testbed -t serial`
+* To test keyboard communication to PIC execute `python -m test.general_testbed -t keytocontroller`
+* To test tracking execute `python -m test.general_testbed -t tracking`
+* To test patch selection execute `python -m test.general_testbed -t patchselector`
+There you go, play with that.
 
 ## Versioning
 *Current version: **1.0624***
