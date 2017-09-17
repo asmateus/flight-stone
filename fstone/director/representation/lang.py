@@ -68,13 +68,15 @@ class Drony:
         by specifing them in the fixed relations array.
     '''
 
-    DEF_PERSISTENT_ADJECTIVE = '072'
+    DEF_PERSISTENT_ADJECTIVE = '100'
     LANG = _DronyLangDef
     FIXED_RELATIONS = {
-        'mr': '048',
-        'ml': '048',
-        'mf': '048',
-        'mb': '080',
+        'mr': '124',
+        'ml': '124',
+        'mf': '124',
+        'mb': '124',
+        'md': '124',
+        'mu': '090',
     }
     EXCLUDED_RELATIONS = [
         'ru', 'rd', 'rf', 'rb', 'sl', 'sr', 'su', 'sd', 'sb', 'sf'
@@ -112,4 +114,4 @@ class Drony:
         return word
 
     def translateIntensityLevel(self, ch):
-        return int(int(ch) * (160 - 88) / 9)
+        return int(int(ch) * (124) / 9)

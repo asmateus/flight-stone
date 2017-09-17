@@ -44,9 +44,10 @@ class Controller:
         try:
             devices = comports()
             for d in devices:
-                if d.hwid.split('PID')[1].split()[0][1:] == self.device['identifier']:
-                    self.device['port'] = d.device
-                    return d.device
+                if len(d.hwid.split('PID')) > 1:
+                    if d.hwid.split('PID')[1].split()[0][1:] == self.device['identifier']:
+                        self.device['port'] = d.device
+                        return d.device
         except Exception:
             return None
         return None
@@ -96,13 +97,11 @@ class GenericMotionController(Controller):
         try:
             ser = serial.Serial(
                 self.device['port'],
-                self.device['baudrate'],
-                timeout=10000,
-                rtscts=1)
+                self.device['baudrate'])
             data = self.lang.manage(data)
             if data:
                 print(data)
-                ser.write(data.encode('utf8'))
+                ser.write(data.encode('utf-8'))
             ser.close()
         except Exception:
             print('Device disconnected. No retrying on pushing...')

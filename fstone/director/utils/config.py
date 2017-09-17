@@ -7,12 +7,12 @@ CONFIG_FILE = 'fstone/config/flight-stone.json'
 DEFAULT_CONFIGS = dict()
 
 with open(PTH + CONFIG_FILE, 'rb') as jfile:
-    DEFAULT_CONFIGS = json.load(jfile)
+    DEFAULT_CONFIGS = json.loads(jfile.read().decode('utf-8'))
 
 
 def loadConfigInstance():
     with open(PTH + CONFIG_FILE, 'rb') as jfile:
-        DEFAULT_CONFIGS = json.load(jfile)
+        DEFAULT_CONFIGS = json.loads(jfile.read().decode('utf-8'))
         return DEFAULT_CONFIGS
 
 

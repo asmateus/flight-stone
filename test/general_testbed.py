@@ -3,7 +3,7 @@ from iomanager import IOManager
 from representation.controllers import GenericMotionController, GENERIC_TYPES
 from representation.custom_controllers import LocalVideoController, CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
-from representation.devices import ArduinoMegaDevice
+from representation.devices import ArduinoMegaDevice, PIC16F1827Device
 from events.keyboard import KeyboardListener
 from events.tracking import TrackingListener
 from interface.minimal import Application as App
@@ -15,7 +15,7 @@ import sys
 
 def serialWriteReadTest():
     manager = IOManager.getInstance()
-    controller = GenericMotionController(ArduinoMegaDevice)
+    controller = GenericMotionController(PIC16F1827Device)
 
     director = UserDirector()
 
@@ -34,7 +34,7 @@ def simpleKeyboardEventTest():
 
 def keyboardEventTest():
     manager = IOManager.getInstance()
-    controller = GenericMotionController(ArduinoMegaDevice)
+    controller = GenericMotionController(PIC16F1827Device)
 
     director = UserDirector()
 

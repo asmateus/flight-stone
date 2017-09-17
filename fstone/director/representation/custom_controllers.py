@@ -4,6 +4,8 @@ from representation.controllers import genCheckDevice
 from representation.devices import LocalDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
+import traceback
+import sys
 import subprocess as sp
 import numpy as np
 import os.path
@@ -72,6 +74,7 @@ class LocalVideoController(Controller):
                     self.response.assignData(frame)
                     yield self.response
         except Exception:
+            traceback.print_exc(file=sys.stdout)
             self.endCommunication()
             print('Video ended or interrupted, dropped Buffer')
 

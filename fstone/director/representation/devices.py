@@ -8,8 +8,8 @@
 from representation.lang import Drony
 
 LocalDevice = {
-    'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
-    'identifier': 'drone_flying_2_cut.mp4',
+    'port': '/home/kenshinn/Documents/Proyects/Python/flight-stone/extra/example_videos/',
+    'identifier': 'VID_20170917_162916636.mp4',
     'datatype': type(bytes),
     'baudrate': (720, 1280, 3),
     'language': None,
@@ -37,5 +37,13 @@ ArduinoMegaDevice = {
     'identifier': '2341:0042',  # idVendor - idProduct
     'datatype': type(str),
     'baudrate': 115200,
+    'language': Drony,
+}
+
+PIC16F1827Device = {
+    'port': None,
+    'identifier': '10C4:EA60',  # idVendor - idProduct
+    'datatype': type(str),
+    'baudrate': 9600,
     'language': Drony,
 }
