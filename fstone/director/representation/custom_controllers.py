@@ -1,7 +1,7 @@
 '''Non generic controllers here. '''
 from representation.controllers import Controller
 from representation.controllers import genCheckDevice
-from representation.devices import LocalDevice
+from representation.devices import LocalDevice, StreamDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
 import traceback
@@ -80,3 +80,9 @@ class LocalVideoController(Controller):
 
     def endCommunication(self):
         self.endtr = True
+
+
+class StreamController(Controller):
+    def __init__(self, device=StreamDevice):
+        super(StreamController, self).__init__()
+        self.device = device

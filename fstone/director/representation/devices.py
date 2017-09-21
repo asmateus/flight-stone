@@ -8,10 +8,19 @@
 from representation.lang import Drony
 
 LocalDevice = {
-    'port': '/home/kenshinn/Documents/Proyects/Python/flight-stone/extra/example_videos/',
+    'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
     'identifier': 'VID_20170917_162916636.mp4',
     'datatype': type(bytes),
     'baudrate': (720, 1280, 3),
+    'language': None,
+}
+
+
+StreamDevice = {
+    'port': None,
+    'identifier': '046d:0821',
+    'datatype': type(bytes),
+    'baudrate': 8,
     'language': None,
 }
 

@@ -50,9 +50,9 @@ def rearrange(img):
 
     # Reassignation process
     # --       --     --       --
-    # | A  | B  |     | D  | X  |
+    # | A  | B  |     | D  | C  |
     # | --- --- |  =  | --- --- |
-    # | C  | D  |     | X  | A  |
+    # | C  | D  |     | B  | A  |
     # --       --     --       --
 
     # Switch A and D sections
