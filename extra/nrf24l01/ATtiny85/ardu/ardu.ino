@@ -48,7 +48,7 @@ void loop()
   receive_payload();
    
   if((GetReg(STATUS) & (1<<6)) == 0) {
-    Serial.println("NOP");  
+    //Serial.println("NOP");  
   }
   else {
     Serial.print("He contado: ");

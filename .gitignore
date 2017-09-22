@@ -12,6 +12,12 @@
 *.sublime-project
 *.sublime-workspace
 
+# ***********
+# Local tests
+# ***********
+extra/local_tests/*
+*.mp4
+
 # ********************************
 # Python related files and folders
 # ********************************
@@ -101,6 +107,7 @@ celerybeat-schedule
 env/
 venv/
 ENV/
+vSerial/*
 
 # Spyder project settings
 .spyderproject
