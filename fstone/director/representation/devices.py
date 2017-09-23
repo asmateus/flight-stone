@@ -5,7 +5,7 @@
     Also, only one Kinect at a time can be used. To assure that singleton pattern is enforced
     from the controller superclass
 '''
-from representation.lang import Drony
+from representation.lang import Drony, KinectLang
 
 LocalDevice = {
     'port': '/home/asmateus/Git/flight-stone/extra/example_videos/',
@@ -16,12 +16,21 @@ LocalDevice = {
 }
 
 
-StreamDevice = {
+StreamDeviceStarTEC = {
     'port': None,
-    'identifier': '046d:0821',
+    'identifier': '1c4f:3002',
     'datatype': type(bytes),
-    'baudrate': 8,
+    'baudrate': (480, 640, 3),
     'language': None,
+}
+
+
+KinectDevice = {
+    'port': None,
+    'identifier': ('045e:02bf', '045e:02be', '045e:02c2'),
+    'datatype': type(bytes),
+    'baudrate': None,
+    'language': KinectLang,
 }
 
 
@@ -51,7 +60,7 @@ ArduinoMegaDevice = {
 
 PIC16F1827Device = {
     'port': None,
-    'identifier': '10C4:EA60',  # idVendor - idProduct
+    'identifier': '10c4:ea60',  # idVendor - idProduct
     'datatype': type(str),
     'baudrate': 9600,
     'language': Drony,

@@ -1,9 +1,10 @@
 '''Non generic controllers here. '''
 from representation.controllers import Controller
-from representation.controllers import genCheckDevice
-from representation.devices import LocalDevice, StreamDevice
+from representation.controllers import genCheckDevice, checkDevice
+from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
+import freenect
 import traceback
 import sys
 import subprocess as sp
@@ -14,6 +15,7 @@ import os.path
 # Custom types start with 2
 CUSTOM_TYPES = {
     'local_video': 2,
+    'kinect': 3,
 }
 
 
@@ -83,6 +85,56 @@ class LocalVideoController(Controller):
 
 
 class StreamController(Controller):
-    def __init__(self, device=StreamDevice):
+    def __init__(self, device=StreamDeviceStarTEC):
         super(StreamController, self).__init__()
         self.device = device
+        self.pth = self.deviceQuery()
+
+
+class KinectController(Controller):
+    def __init__(self, device=KinectDevice):
+        super(KinectController, self).__init__()
+        self.device = device
+
+        self.controller_type = CUSTOM_TYPES['kinect']
+
+        # Initialize the response instance
+        self.response = IOResponse(self.controller_type)
+
+    def deviceQuery(self):
+        # Check if the Kinect is present in the system. That is, the output of the lsusb command
+        # list all the kinect devices (audio, video and motor)
+
+        devices_query = sp.check_output('lsusb')
+
+        required_ids = list(self.device.identifier)
+        for device in devices_query.split('\n'):
+            if device:
+                # Fetch the device ID
+                ID = device.split('ID')[1].split(' ')[1]
+
+                if ID.lower() in required_ids:
+                    required_ids.remove(ID)
+
+        if len(required_ids):
+            return None
+        else:
+            return 'NA'
+
+    @genCheckDevice
+    def pullData(self):
+        try:
+            # The idea is to return four data types: RGB image, Depth image and angle state
+            depth, rgb = freenect.sync_get_depth(), freenect.sync_get_video()
+
+            self.response.assignStatus(RESPONSE_STATUS['OK'])
+            self.response.assignData((depth, rgb))
+
+            yield self.response
+        except Exception:
+            traceback.print_exc(file=sys.stdout)
+            print('Failed to retreive Kinect data')
+
+    @checkDevice
+    def pushData(self, data):
+        pass

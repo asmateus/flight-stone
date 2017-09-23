@@ -45,7 +45,7 @@ class Controller:
             devices = comports()
             for d in devices:
                 if len(d.hwid.split('PID')) > 1:
-                    if d.hwid.split('PID')[1].split()[0][1:] == self.device['identifier']:
+                    if d.hwid.split('PID')[1].split()[0][1:].lower() == self.device['identifier']:
                         self.device['port'] = d.device
                         return d.device
         except Exception:
