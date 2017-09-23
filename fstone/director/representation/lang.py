@@ -115,3 +115,7 @@ class Drony:
 
     def translateIntensityLevel(self, ch):
         return int(int(ch) * (124) / 9)
+
+
+class KinectLang:
+    pass
