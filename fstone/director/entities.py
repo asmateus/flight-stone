@@ -52,9 +52,12 @@ class UIDirector(_Director):
     def manageIOResponse(self, response):
         if response.getType() == RESPONSE_TYPES['local_video']:
             self.last_response = response.getData()
-            if not self.app:
-                return
-            self.app.updateVideoState(self.last_response)
+        elif response.getType() == RESPONSE_TYPES['kinect']:
+            _, self.last_response = response.getData()
+
+        if not self.app:
+            return
+        self.app.updateVideoState(self.last_response)
 
     def manageEventResponse(self, ev_type, rs):
         if ev_type == 'tracking':

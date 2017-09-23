@@ -14,7 +14,7 @@ class PatchSelectorApp(tk.Frame):
         # Associate application root to main controller
         self.root = master
         self.root.configure(bg='white')
-        self.root.minsize(width=1640, height=720)
+        self.root.minsize(width=1000, height=480)
         self.root.resizable(width=False, height=False)
         self.root.title('Patch extraction: USER INTERFACE')
 
@@ -52,7 +52,7 @@ class PatchSelectorApp(tk.Frame):
             command=self.browseFiles,
             bg='white'
         )
-        self.file_selector.place(x=1290, y=10)
+        self.file_selector.place(x=650, y=10)
 
         # File name display
         self.file_selection_string = tk.StringVar()
@@ -62,7 +62,7 @@ class PatchSelectorApp(tk.Frame):
             textvariable=self.file_selection_string,
             bg='white',
         )
-        self.file_selection_label.place(x=1370, y=16)
+        self.file_selection_label.place(x=730, y=16)
 
         # Section information
         descriptor_section = tk.Label(
@@ -71,7 +71,7 @@ class PatchSelectorApp(tk.Frame):
             fg='#666666',
             bg='white',
         )
-        descriptor_section.place(x=1290, y=50)
+        descriptor_section.place(x=650, y=50)
 
         # Descriptor types
         self.descriptor_var_chd = tk.IntVar()
@@ -84,7 +84,7 @@ class PatchSelectorApp(tk.Frame):
             highlightthickness=0
         )
         self.descriptor_chd.bind('<Button-1>', self.updateDescriptorCHD)
-        self.descriptor_chd.place(x=1300, y=75)
+        self.descriptor_chd.place(x=660, y=75)
         self.descriptor_var_sift = tk.IntVar()
         self.descriptor_sift = tk.Checkbutton(
             self.root,
@@ -95,7 +95,7 @@ class PatchSelectorApp(tk.Frame):
             highlightthickness=0,
         )
         self.descriptor_sift.bind('<Button-1>', self.updateDescriptorSIFT)
-        self.descriptor_sift.place(x=1300, y=100)
+        self.descriptor_sift.place(x=660, y=100)
 
         # Selection of maximum amount of features to find:
         max_features_label = tk.Label(
@@ -104,7 +104,7 @@ class PatchSelectorApp(tk.Frame):
             bg='white',
             fg='#666666',
         )
-        max_features_label.place(x=1290, y=125)
+        max_features_label.place(x=650, y=125)
 
         max_features_label_2 = tk.Label(
             self.root,
@@ -112,7 +112,7 @@ class PatchSelectorApp(tk.Frame):
             bg='white',
             anchor='s'
         )
-        max_features_label_2.place(x=1300, y=147)
+        max_features_label_2.place(x=660, y=147)
 
         self.max_features_string = tk.StringVar()
         self.max_features_string.set('-1')
@@ -124,7 +124,7 @@ class PatchSelectorApp(tk.Frame):
             justify='c',
             font=('Verdana', 10),
         )
-        self.max_features_box.place(x=1380, y=145)
+        self.max_features_box.place(x=740, y=145)
 
         # Select name for patch
         patch_name_label = tk.Label(
@@ -134,7 +134,7 @@ class PatchSelectorApp(tk.Frame):
             fg='#666666',
             anchor='s'
         )
-        patch_name_label.place(x=1290, y=170)
+        patch_name_label.place(x=650, y=170)
         self.patch_name_string = tk.StringVar()
         self.patch_name_string.trace('w', self.patchNameUpdated)
         self.patch_name_string.set('')
@@ -145,7 +145,7 @@ class PatchSelectorApp(tk.Frame):
             width=20,
             justify='l',
         )
-        self.patch_name_box.place(x=1300, y=190)
+        self.patch_name_box.place(x=660, y=190)
 
         # Generate description buttons
         self.description_generator = tk.Button(
@@ -154,7 +154,7 @@ class PatchSelectorApp(tk.Frame):
             command=self.generateDescriptions,
             bg='white'
         )
-        self.description_generator.place(x=1290, y=220)
+        self.description_generator.place(x=650, y=220)
 
         # Save Patch button
         self.save_patch = tk.Button(
@@ -163,7 +163,7 @@ class PatchSelectorApp(tk.Frame):
             command=self.savePatch,
             bg='white'
         )
-        self.save_patch.place(x=1380, y=220)
+        self.save_patch.place(x=740, y=220)
 
         # Set default descriptor
         self.default_patch_var = tk.IntVar()
@@ -175,7 +175,7 @@ class PatchSelectorApp(tk.Frame):
             borderwidth=0,
             highlightthickness=0
         )
-        self.default_patch.place(x=1290, y=260)
+        self.default_patch.place(x=650, y=260)
 
         # Rectangle selection info
         self.general_info_string = tk.StringVar()
@@ -186,7 +186,7 @@ class PatchSelectorApp(tk.Frame):
             fg='red',
             anchor='s'
         )
-        self.general_info.place(x=1290, y=703)
+        self.general_info.place(x=650, y=463)
         self.updateInformation()
 
     def imageClick(self, location):
