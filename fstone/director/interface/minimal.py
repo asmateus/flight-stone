@@ -7,9 +7,9 @@ Point = namedtuple('Point', ['x', 'y'])
 
 class Application(tk.Frame):
     def __init__(self, master):
-        super().__init__(master, width=1280, height=720, bg='white')
-        self.width = 1280
-        self.height = 720
+        super().__init__(master, width=640, height=500, bg='white')
+        self.width = 640
+        self.height = 500
 
         # Associate application root to main controller
         self.root = master
