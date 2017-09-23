@@ -62,7 +62,6 @@ class UIDirector(_Director):
     def manageEventResponse(self, ev_type, rs):
         if ev_type == 'tracking':
             self.app.setRegionToDraw(rs[0][0], rs[0][1])
-            self.app.updatePatchState(rs[1])
 
     def assignApplicationInstance(self, app):
         self.app = app

@@ -115,8 +115,6 @@ def trackingTest():
     # Start UI in main thread
     while True:
         if application.status:
-            application.updateVideoHolder()
-            application.updatePatchHolder()
             application.update()
             application.update_idletasks()
         else:
