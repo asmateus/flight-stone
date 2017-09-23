@@ -1,7 +1,7 @@
 from entities import UserDirector, UIDirector, TrackingDirector
 from iomanager import IOManager
 from representation.controllers import GenericMotionController, GENERIC_TYPES
-from representation.custom_controllers import LocalVideoController, CUSTOM_TYPES
+from representation.custom_controllers import LocalVideoController, KinectController, CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
 from representation.devices import ArduinoMegaDevice, PIC16F1827Device
 from events.keyboard import KeyboardListener
@@ -123,6 +123,35 @@ def trackingTest():
             break
 
 
+def kinectStreamTest():
+    manager = IOManager.getInstance()
+    controller = KinectController()
+
+    # In this case the director required is a UI director
+    director = UIDirector()
+
+    # Application instance to display the image
+    tk_controller = Tk()
+    application = App(tk_controller)
+
+    # UI directors require that an application instance is passed to them, and it must implement
+    # the updateVideoState method
+    director.assignApplicationInstance(application)
+
+    manager.addSubscriber(director, CUSTOM_TYPES['kinect'])
+    con_id = manager.addController(controller)
+
+    manager.readController(con_id)
+
+    while True:
+        if application.status:
+            application.updateVideoHolder()
+            application.update()
+            application.update_idletasks()
+        else:
+            break
+
+
 def patchSelection():
     PatchSelectorManager(2)
 
@@ -140,6 +169,7 @@ if __name__ == '__main__':
         'localv': localVideoTest,
         'tracking': trackingTest,
         'patchselector': patchSelection,
+        'kinectstream': kinectStreamTest,
     }
 
     if not test_mode:
