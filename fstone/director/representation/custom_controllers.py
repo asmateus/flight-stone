@@ -106,8 +106,9 @@ class KinectController(Controller):
         # list all the kinect devices (audio, video and motor)
 
         devices_query = sp.check_output('lsusb')
+        devices_query = devices_query.decode('utf-8')
 
-        required_ids = list(self.device.identifier)
+        required_ids = list(self.device['identifier'])
         for device in devices_query.split('\n'):
             if device:
                 # Fetch the device ID
@@ -124,13 +125,14 @@ class KinectController(Controller):
     @genCheckDevice
     def pullData(self):
         try:
-            # The idea is to return four data types: RGB image, Depth image and angle state
-            depth, rgb = freenect.sync_get_depth(), freenect.sync_get_video()
+            while True:
+                # The idea is to return four data types: RGB image, Depth image and angle state
+                depth, rgb = freenect.sync_get_depth(), freenect.sync_get_video()
 
-            self.response.assignStatus(RESPONSE_STATUS['OK'])
-            self.response.assignData((depth, rgb))
+                self.response.assignStatus(RESPONSE_STATUS['OK'])
+                self.response.assignData((depth, rgb))
 
-            yield self.response
+                yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
             print('Failed to retreive Kinect data')

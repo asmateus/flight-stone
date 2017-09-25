@@ -54,6 +54,7 @@ class UIDirector(_Director):
             self.last_response = response.getData()
         elif response.getType() == RESPONSE_TYPES['kinect']:
             _, self.last_response = response.getData()
+            self.last_response = self.last_response[0]
 
         if not self.app:
             return
