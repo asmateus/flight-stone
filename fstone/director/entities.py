@@ -55,6 +55,8 @@ class UIDirector(_Director):
         elif response.getType() == RESPONSE_TYPES['kinect']:
             _, self.last_response = response.getData()
             self.last_response = self.last_response[0]
+        elif response.getType() == RESPONSE_TYPES['stream']:
+            self.last_response = response.getData()
 
         if not self.app:
             return
@@ -83,6 +85,9 @@ class TrackingDirector(_Director):
 
     def manageIOResponse(self, response):
         if response.getType() == RESPONSE_TYPES['local_video']:
+            self.last_response = response.getData()
+            self.trackNextFrame()
+        elif response.getType() == RESPONSE_TYPES['stream']:
             self.last_response = response.getData()
             self.trackNextFrame()
 

@@ -16,6 +16,7 @@ import os.path
 CUSTOM_TYPES = {
     'local_video': 2,
     'kinect': 3,
+    'stream': 4,
 }
 
 
@@ -89,6 +90,59 @@ class StreamController(Controller):
         super(StreamController, self).__init__()
         self.device = device
         self.pth = self.deviceQuery()
+
+        self.controller_type = CUSTOM_TYPES['stream']
+
+        # Initialize the response instance
+        self.response = IOResponse(self.controller_type)
+
+    def deviceQuery(self):
+        self.device['port'] = '/dev/video1'
+        return '/dev/video1'
+
+    @genCheckDevice
+    def pullData(self):
+        try:
+            if self.pth:
+                cmd = [
+                    'ffmpeg',
+                    '-i', self.device['port'],  # Define path of the video
+                    '-r', '10',
+                    '-f', 'image2pipe',  # Send output to pipe
+                    '-pix_fmt', 'rgb24',  # Pixel format as rgb24
+                    '-vcodec', 'rawvideo', '-'  # Make output raw
+                ]
+
+                self.pipe = sp.Popen(
+                    cmd,
+                    stdin=sp.PIPE,
+                    stderr=sp.PIPE,
+                    stdout=sp.PIPE,
+                    bufsize=10**8
+                )
+                while True:
+                    if self.endtr:
+                        self.pipe.close()
+                        return
+
+                    # Slow video to a good rate, for streaming to a person
+                    sleep(0.03)
+                    frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
+                    self.pipe.stdout.flush()
+
+                    frame = np.fromstring(frame, dtype='uint8')
+                    frame = frame.reshape(self.device['baudrate'])
+
+                    self.response.assignStatus(RESPONSE_STATUS['OK'])
+                    self.response.assignData(frame)
+                    yield self.response
+        except Exception:
+            traceback.print_exc(file=sys.stdout)
+            self.endCommunication()
+            print('Video ended or interrupted, dropped Buffer')
+
+    def endCommunication(self):
+        self.endtr = True
 
 
 class KinectController(Controller):
