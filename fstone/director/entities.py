@@ -3,6 +3,7 @@ from core.mechanics import TDLTracker
 from representation.custom_controllers import CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
 from utils.config import DEFAULT_CONFIGS
+from collections import namedtuple
 
 RESPONSE_TYPES = {**GENERIC_TYPES, **CUSTOM_TYPES}
 
@@ -117,6 +118,48 @@ class TrackingDirector(_Director):
         if response is not None:
             self.tracking_state = TDLTracker.STATE_INITIATED
             self.listener.manageEvent(response, self.mechanism.root_patch.patch)
+
+
+class StabilityDirector(_Director):
+    '''
+        StabilityDirector compares the current position of the drone with a saved snapshot
+        position and returns the direction gradient for optimal stability.
+        The stability director must be initialized with a snapshot of the drone, a snapshot is
+        defined as: (X, Y, W, H) where X, Y are the upper left positions of the drone boundbox,
+        and W, H are its size.
+    '''
+
+    SnapShot = namedtuple('SnapShot', ['x', 'y', 'h', 'w'])
+    MARGINS = SnapShot(x=5, y=5, h=5, w=10)
+    VZERO = SnapShot(x=0, y=0, h=0, w=0)
+
+    def __init__(self, snapshot):
+        self._snapshot = snapshot
+
+    def resetSnapShot(self, snapshot):
+        self._snapshot = snapshot
+
+    def _calculateDistanceVector(self, snapshot):
+        def perimeter(snap):
+            return 2 * (snap.w + snap.h)
+        dvector = [0, 0, 0]
+
+        xdelta = snapshot.x - self._snapshot.x
+        ydelta = snapshot.y - self._snapshot.y
+        pdelta = perimeter(snapshot) - perimeter(self._snapshot)
+
+        if abs(xdelta) > self.MARGINS.x:
+            dvector[0] = xdelta // abs(xdelta)
+        if abs(ydelta) > self.MARGINS.y:
+            dvector[1] = ydelta // abs(ydelta)
+        if abs(pdelta) > perimeter(self.MARGINS):
+            dvector[2] = pdelta // abs(pdelta)
+
+        return dvector
+
+    def getMovementGradients(self, snapshot, filter_size=3):
+        gradient_vector = self._calculateDistanceVector(snapshot)
+        return gradient_vector[0: filter_size]
 
 
 class AIDirector(_Director):

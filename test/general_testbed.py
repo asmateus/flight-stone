@@ -189,7 +189,7 @@ def trackingFromStream():
     track_director = TrackingDirector()
 
     # TrackingDirector needs a frame buffer, so we subscribe it to the manager
-    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
+    # manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
 
     # UIDirector also needs to be subscribed, to receive the frames
     manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])

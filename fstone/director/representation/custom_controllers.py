@@ -107,7 +107,7 @@ class StreamController(Controller):
                 cmd = [
                     'ffmpeg',
                     '-i', self.device['port'],  # Define path of the video
-                    '-r', '10',
+                    '-r', '20',
                     '-f', 'image2pipe',  # Send output to pipe
                     '-pix_fmt', 'rgb24',  # Pixel format as rgb24
                     '-vcodec', 'rawvideo', '-'  # Make output raw
