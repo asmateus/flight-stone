@@ -1,4 +1,9 @@
 {
+	"default_tracking_method": "color",
     "default_patch_name": "small_Def_2",
-    "default_system_device": "Kinect"
+    "default_system_device": "Kinect",
+    "default_erode_kernel_size": 5,
+    "default_dilate_kernel_size": 9,
+    "default_hsi_target_color": [10, 10, 10],
+    "on_install_app_pth": "$HOME/.flight-stone"
 }
