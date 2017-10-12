@@ -11,6 +11,7 @@
 # *********************
 *.sublime-project
 *.sublime-workspace
+.directory
 
 # ***********
 # Local tests
