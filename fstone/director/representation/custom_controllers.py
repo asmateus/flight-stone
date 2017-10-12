@@ -14,7 +14,7 @@ import os.path
 try:
 	import freenect
 except Exception:
-	print('** x	Current System does not support Kinect Device **')
+	print('** Current System does not support Kinect Device **')
 
 # Custom types start with 2
 CUSTOM_TYPES = {
@@ -101,8 +101,8 @@ class StreamController(Controller):
         self.response = IOResponse(self.controller_type)
 
     def deviceQuery(self):
-        self.device['port'] = '/dev/video1'
-        return '/dev/video1'
+        self.device['port'] = '/dev/video0'
+        return '/dev/video0'
 
     @genCheckDevice
     def pullData(self):

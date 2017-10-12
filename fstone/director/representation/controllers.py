@@ -100,8 +100,8 @@ class GenericMotionController(Controller):
                 self.device['baudrate'])
             data = self.lang.manage(data)
             if data:
-                print(data)
                 ser.write(data.encode('utf-8'))
+                print(serial.readline())
             ser.close()
         except Exception:
             print('Device disconnected. No retrying on pushing...')
