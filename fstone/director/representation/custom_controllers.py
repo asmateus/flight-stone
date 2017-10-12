@@ -107,7 +107,6 @@ class StreamController(Controller):
                 cmd = [
                     'ffmpeg',
                     '-i', self.device['port'],  # Define path of the video
-                    '-r', '20',
                     '-f', 'image2pipe',  # Send output to pipe
                     '-pix_fmt', 'rgb24',  # Pixel format as rgb24
                     '-vcodec', 'rawvideo', '-'  # Make output raw
@@ -125,8 +124,6 @@ class StreamController(Controller):
                         self.pipe.close()
                         return
 
-                    # Slow video to a good rate, for streaming to a person
-                    sleep(0.03)
                     frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
                     self.pipe.stdout.flush()
 
@@ -135,6 +132,7 @@ class StreamController(Controller):
 
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
+
                     yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
