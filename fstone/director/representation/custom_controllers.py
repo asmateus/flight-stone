@@ -4,13 +4,17 @@ from representation.controllers import genCheckDevice, checkDevice
 from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
-import freenect
 import traceback
 import sys
 import subprocess as sp
 import numpy as np
 import os.path
 
+
+try:
+	import freenect
+except Exception:
+	print('** x	Current System does not support Kinect Device **')
 
 # Custom types start with 2
 CUSTOM_TYPES = {
