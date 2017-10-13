@@ -5,6 +5,7 @@ from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevic
 from representation.responses import IOResponse, RESPONSE_STATUS
 from time import sleep
 import traceback
+import time
 import sys
 import subprocess as sp
 import numpy as np
@@ -70,8 +71,9 @@ class LocalVideoController(Controller):
                         return
 
                     # Slow video to a good rate, for streaming to a person
-                    sleep(0.03)
+                    print('Before reading frame')
                     frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
+                    print('After reading frame')
                     self.pipe.stdout.flush()
 
                     frame = np.fromstring(frame, dtype='uint8')
@@ -79,6 +81,7 @@ class LocalVideoController(Controller):
 
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
+
                     yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
@@ -101,8 +104,8 @@ class StreamController(Controller):
         self.response = IOResponse(self.controller_type)
 
     def deviceQuery(self):
-        self.device['port'] = '/dev/video0'
-        return '/dev/video0'
+        self.device['port'] = '/dev/video1'
+        return '/dev/video1'
 
     @genCheckDevice
     def pullData(self):
@@ -119,10 +122,12 @@ class StreamController(Controller):
                 self.pipe = sp.Popen(
                     cmd,
                     stdin=sp.PIPE,
-                    stderr=sp.PIPE,
                     stdout=sp.PIPE,
+                    stderr=sp.DEVNULL,
                     bufsize=10**8
                 )
+                t1 = time.time()
+                count = 0
                 while True:
                     if self.endtr:
                         self.pipe.close()
@@ -130,12 +135,17 @@ class StreamController(Controller):
 
                     frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
                     self.pipe.stdout.flush()
+                    self.pipe.stdin.flush()
 
                     frame = np.fromstring(frame, dtype='uint8')
                     frame = frame.reshape(self.device['baudrate'])
 
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
+
+                    print('Time:', str(time.time() - t1))
+                    print('Count:', str(count))
+                    count += 1
 
                     yield self.response
         except Exception:

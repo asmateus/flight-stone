@@ -17,6 +17,7 @@
 # Local tests
 # ***********
 extra/local_tests/*
+extra/local/*
 *.mp4
 
 # ********************************
