@@ -12,9 +12,9 @@ import os.path
 
 
 try:
-	import freenect
+    import freenect
 except Exception:
-	print('** Current System does not support Kinect Device **')
+    print('** Current System does not support Kinect Device **')
 
 # Custom types start with 2
 CUSTOM_TYPES = {

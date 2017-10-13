@@ -244,7 +244,7 @@ if __name__ == '__main__':
         'patchselector': patchSelection,
         'kinectstream': kinectStreamTest,
         'simplestream': simpleStream,
-        'trackingstream': trackingFromStream,
+        'streamtracker': trackingFromStream,
     }
 
     if not test_mode:
