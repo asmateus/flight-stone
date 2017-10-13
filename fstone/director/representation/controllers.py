@@ -101,7 +101,7 @@ class GenericMotionController(Controller):
             data = self.lang.manage(data)
             if data:
                 ser.write(data.encode('utf-8'))
-                print(serial.readline())
+                print(ser.readline())
             ser.close()
         except Exception:
             print('Device disconnected. No retrying on pushing...')
