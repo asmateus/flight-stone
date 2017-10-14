@@ -104,12 +104,10 @@ class IOManager():
         if IOManager.instance:
             _, _, action = IOManager.instance.controllers[stamp_index]
             for result in controller.pullData():
-                controller.lock()
                 if result:
                     IOManager.instance.onControllerResponse(controller.controller_type, result)
                 if not action:
                     controller.endtr = True
-                controller.unlock()
 
             # If endtr here is False, something wrong happened
             if not controller.endtr:

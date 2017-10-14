@@ -4,11 +4,11 @@ from representation.controllers import genCheckDevice, checkDevice
 from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 import traceback
-import time
 import sys
 import subprocess as sp
 import numpy as np
 import os.path
+import cv2
 
 
 try:
@@ -37,7 +37,6 @@ class LocalVideoController(Controller):
 
         # Define connection pipe to file
         self.pipe = None
-        self.locked = False
 
     def deviceQuery(self):
         pth = self.device['port'] + self.device['identifier']
@@ -45,12 +44,6 @@ class LocalVideoController(Controller):
             return pth
         else:
             return None
-
-    def unlock(self):
-        self.locked = False
-
-    def lock(self):
-        self.locked = True
 
     @genCheckDevice
     def pullData(self):
@@ -76,20 +69,20 @@ class LocalVideoController(Controller):
                         self.pipe.close()
                         return
 
-                    if not self.locked:
-                        # Slow video to a good rate, for streaming to a person
-                        print('Before reading frame')
-                        frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
-                        print('After reading frame')
-                        self.pipe.stdout.flush()
+                    print(self.locked)
+                    # Slow video to a good rate, for streaming to a person
+                    print('Before reading frame')
+                    frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
+                    print('After reading frame')
+                    self.pipe.stdout.flush()
 
-                        frame = np.fromstring(frame, dtype='uint8')
-                        frame = frame.reshape(self.device['baudrate'])
+                    frame = np.fromstring(frame, dtype='uint8')
+                    frame = frame.reshape(self.device['baudrate'])
 
-                        self.response.assignStatus(RESPONSE_STATUS['OK'])
-                        self.response.assignData(frame)
+                    self.response.assignStatus(RESPONSE_STATUS['OK'])
+                    self.response.assignData(frame)
 
-                        yield self.response
+                    yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
             self.endCommunication()
@@ -110,6 +103,8 @@ class StreamController(Controller):
         # Initialize the response instance
         self.response = IOResponse(self.controller_type)
 
+        self.locked = False
+
     def deviceQuery(self):
         self.device['port'] = '/dev/video1'
         return '/dev/video1'
@@ -118,38 +113,18 @@ class StreamController(Controller):
     def pullData(self):
         try:
             if self.pth:
-                cmd = [
-                    'ffmpeg',
-                    '-i', self.device['port'],  # Define path of the video
-                    '-f', 'image2pipe',  # Send output to pipe
-                    '-pix_fmt', 'rgb24',  # Pixel format as rgb24
-                    '-vcodec', 'rawvideo', '-'  # Make output raw
-                ]
-
-                self.pipe = sp.Popen(
-                    cmd,
-                    stdin=sp.PIPE,
-                    stdout=sp.PIPE,
-                    stderr=sp.DEVNULL,
-                    bufsize=10**8
-                )
+                capture = cv2.VideoCapture(1)
                 while True:
-                    t1 = time.time()
                     if self.endtr:
-                        self.pipe.close()
+                        capture.release()
                         return
 
-                    frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
-                    self.pipe.stdout.flush()
-                    self.pipe.stdin.flush()
-
-                    frame = np.fromstring(frame, dtype='uint8')
-                    frame = frame.reshape(self.device['baudrate'])
+                    _, frame = capture.read()
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
 
-                    print('Read time', time.time() - t1)
                     yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
