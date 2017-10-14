@@ -156,12 +156,31 @@ class StabilityDirector(_Director):
         and W, H are its size.
     '''
 
-    SnapShot = namedtuple('SnapShot', ['x', 'y', 'h', 'w'])
-    MARGINS = SnapShot(x=5, y=5, h=5, w=10)
+    SnapShot = namedtuple('SnapShot', ['x', 'y', 'w', 'h'])
+    MARGINS = SnapShot(x=10, y=10, h=10, w=10)
     VZERO = SnapShot(x=0, y=0, h=0, w=0)
 
-    def __init__(self, snapshot):
+    def __init__(self, snapshot=None):
         self._snapshot = snapshot
+        self.count = 0
+
+    def manageEventResponse(self, ev_type, rs):
+        if ev_type == 'tracking':
+            snap = rs[0]
+            snapshot = StabilityDirector.SnapShot(
+                x=snap[0][0],
+                y=snap[0][1],
+                w=snap[1][0] - snap[0][0],
+                h=snap[1][1] - snap[0][1],
+            )
+            if self.count == 0:
+                self.count = 1
+                self.resetSnapShot(snapshot)
+                print('Setting root snapshot:', snapshot)
+            else:
+                print('Stability vector:', self._calculateDistanceVector(snapshot))
+        if ev_type == 'keyboard':
+                print(rs)
 
     def resetSnapShot(self, snapshot):
         self._snapshot = snapshot

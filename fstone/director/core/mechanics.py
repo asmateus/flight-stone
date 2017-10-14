@@ -141,23 +141,7 @@ class ColorTracker:
         dists_x = [ma - mi for ma, mi in zip(maxs_x, mins_x)]
         dists_y = [ma - mi for ma, mi in zip(maxs_y, mins_y)]
 
-        dist_from_prev = [
-            ColorTracker.distance(
-                prv_pt,
-                (mins_x[i] + dists_x[i], mins_y[i] + dists_y[i])
-            ) for i in range(len(dists_x))]
-
         areas = [x * y for x, y in zip(dists_x, dists_y)]
-        areas_copy = areas.copy()
-
-        # Exclude regions too far away
-        for i in range(len(dist_from_prev)):
-            if dist_from_prev[i] > 60:
-                e = areas[i]
-                areas_copy.remove(e)
-        areas = areas_copy
-        if not len(areas):
-            return None
 
         index_of_largest = areas.index(max(areas))
 
