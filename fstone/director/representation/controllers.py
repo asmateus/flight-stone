@@ -40,6 +40,12 @@ class Controller:
     def pushData(self):
         raise NotImplementedError
 
+    def lock(self):
+        pass
+
+    def unlock(self):
+        pass
+
     def deviceQuery(self):
         try:
             devices = comports()

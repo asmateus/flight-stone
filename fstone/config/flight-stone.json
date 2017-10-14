@@ -4,7 +4,7 @@
     "default_system_device": "Kinect",
     "default_erode_kernel_size": 5,
     "default_dilate_kernel_size": 9,
-    "default_hsi_tcolor_upper": [10, 10, 10],
-    "default_hsi_tcolor_lower": [10, 10, 10],
+    "default_hsi_tcolor_upper": [9, 198, 211],
+    "default_hsi_tcolor_lower": [0, 99, 89],
     "on_install_app_pth": "$HOME/.flight-stone"
 }

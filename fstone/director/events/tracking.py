@@ -8,7 +8,7 @@ class TrackingListener:
         self.subscribers = []
         self.event_type = 'tracking'
 
-    def manageEvent(self, response, ov):
+    def manageEvent(self, response, ov=None):
         for subscriber_stamp in self.subscribers:
             subscriber, _ = subscriber_stamp
             subscriber.manageEventResponse(self.event_type, [response, ov])

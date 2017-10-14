@@ -1,5 +1,5 @@
 from representation.controllers import GENERIC_TYPES
-from core.mechanics import TDLTracker
+from core.mechanics import TDLTracker, ColorTracker
 from representation.custom_controllers import CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
 from utils.config import DEFAULT_CONFIGS
@@ -69,6 +69,33 @@ class UIDirector(_Director):
 
     def assignApplicationInstance(self, app):
         self.app = app
+
+
+class ColorTrackingDirector(_Director):
+    def __init__(self):
+        super(ColorTrackingDirector, self).__init__()
+        self.mechanism = ColorTracker(DEFAULT_CONFIGS)
+        self.listener = None
+
+    def manageIOResponse(self, response):
+        if response.getType() == RESPONSE_TYPES['local_video']:
+            self.last_response = response.getData()
+            self.trackNextFrame()
+        elif response.getType() == RESPONSE_TYPES['stream']:
+            self.last_response = response.getData()
+            self.trackNextFrame()
+
+    def setTrackingListener(self, listener):
+        self.listener = listener
+
+    def trackNextFrame(self):
+        response = self.mechanism.findTarget(self.last_response)
+
+        self.solveIssuedResponse(response)
+
+    def solveIssuedResponse(self, response):
+        if response is not None:
+            self.listener.manageEvent(response)
 
 
 class TrackingDirector(_Director):

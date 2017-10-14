@@ -3,7 +3,6 @@ from representation.controllers import Controller
 from representation.controllers import genCheckDevice, checkDevice
 from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
-from time import sleep
 import traceback
 import time
 import sys
@@ -38,6 +37,7 @@ class LocalVideoController(Controller):
 
         # Define connection pipe to file
         self.pipe = None
+        self.locked = False
 
     def deviceQuery(self):
         pth = self.device['port'] + self.device['identifier']
@@ -45,6 +45,12 @@ class LocalVideoController(Controller):
             return pth
         else:
             return None
+
+    def unlock(self):
+        self.locked = False
+
+    def lock(self):
+        self.locked = True
 
     @genCheckDevice
     def pullData(self):
@@ -70,19 +76,20 @@ class LocalVideoController(Controller):
                         self.pipe.close()
                         return
 
-                    # Slow video to a good rate, for streaming to a person
-                    print('Before reading frame')
-                    frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
-                    print('After reading frame')
-                    self.pipe.stdout.flush()
+                    if not self.locked:
+                        # Slow video to a good rate, for streaming to a person
+                        print('Before reading frame')
+                        frame = self.pipe.stdout.read(np.prod(self.device['baudrate']))
+                        print('After reading frame')
+                        self.pipe.stdout.flush()
 
-                    frame = np.fromstring(frame, dtype='uint8')
-                    frame = frame.reshape(self.device['baudrate'])
+                        frame = np.fromstring(frame, dtype='uint8')
+                        frame = frame.reshape(self.device['baudrate'])
 
-                    self.response.assignStatus(RESPONSE_STATUS['OK'])
-                    self.response.assignData(frame)
+                        self.response.assignStatus(RESPONSE_STATUS['OK'])
+                        self.response.assignData(frame)
 
-                    yield self.response
+                        yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)
             self.endCommunication()
@@ -126,9 +133,8 @@ class StreamController(Controller):
                     stderr=sp.DEVNULL,
                     bufsize=10**8
                 )
-                t1 = time.time()
-                count = 0
                 while True:
+                    t1 = time.time()
                     if self.endtr:
                         self.pipe.close()
                         return
@@ -143,10 +149,7 @@ class StreamController(Controller):
                     self.response.assignStatus(RESPONSE_STATUS['OK'])
                     self.response.assignData(frame)
 
-                    print('Time:', str(time.time() - t1))
-                    print('Count:', str(count))
-                    count += 1
-
+                    print('Read time', time.time() - t1)
                     yield self.response
         except Exception:
             traceback.print_exc(file=sys.stdout)

@@ -80,17 +80,21 @@ class ColorTracker:
     def rgb2hsv(frame):
         return cv2.cvtColor(frame, cv2.COLOR_RGB2HSV)
 
-    def __init__(self, **configs):
+    @staticmethod
+    def distance(p1, p2):
+        if p1 is None or p2 is None:
+            return 0
+        return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+    def __init__(self, configs):
         # Target color is expressed in HSV color space
         self._color = [configs['default_hsi_tcolor_lower'], configs['default_hsi_tcolor_upper']]
+        self._color = [np.array(c) for c in self._color]
         self._erosion_kernel = configs['default_erode_kernel_size']
         self._dilate_kernel = configs['default_dilate_kernel_size']
         self._previous_point = None
 
     def findTarget(self, frame):
-        def distance(p1, p2):
-            return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
-
         # Frame must be RGB
         # First obtain the respective HSV value
         frame_hsv = ColorTracker.rgb2hsv(frame)
@@ -119,46 +123,53 @@ class ColorTracker:
         # Segmentate drone posible places via find contours. The drone will be chosen to be
         # the largest element of all. A second choice parameter is available, and that is, to
         # considerate the vecinity of the previous location only
-        try:
-            contours = cv2.findContours(res, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
-            mins_x, mins_y = list(), list()
-            maxs_x, maxs_y = list(), list()
-            for contour in contours:
-                cnt = [c[0] for c in contour]
-                cnt_x = [c[0] for c in cnt]
-                cnt_y = [c[1] for c in cnt]
-                mins_x.append(min(cnt_x))
-                mins_y.append(min(cnt_y))
-                maxs_x.append(max(cnt_x))
-                maxs_y.append(max(cnt_y))
-
-            dists_x = [ma - mi for ma, mi in zip(maxs_x, mins_x)]
-            dists_y = [ma - mi for ma, mi in zip(maxs_y, mins_y)]
-
-            dist_from_prev = [
-                distance(
-                    prv_pt,
-                    (mins_x[i] + dists_x[i], mins_y[i] + dists_y[i])
-                ) for i in range(len(dists_x))]
-
-            areas = [x * y for x, y in zip(dists_x, dists_y)]
-
-            # Exclude regions too far
-            for i in range(len(dist_from_prev)):
-                if dist_from_prev[i] > 20:
-                    del areas[i]
-
-            index_of_largest = areas.index(max(areas))
-
-            top_left_pt = (mins_x[index_of_largest], mins_y[index_of_largest])
-            bottom_right_pt = (maxs_x[index_of_largest], maxs_y[index_of_largest])
-
-            x, y = top_left_pt[0], top_left_pt[1]
-            w, h = bottom_right_pt[0] - top_left_pt[0], bottom_right_pt[1] - top_left_pt[1]
-
-            return (x, y, w, h)
-        except Exception:
+        contours = cv2.findContours(res, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
+        if not len(contours):
             return None
+
+        mins_x, mins_y = list(), list()
+        maxs_x, maxs_y = list(), list()
+        for contour in contours:
+            cnt = [c[0] for c in contour]
+            cnt_x = [c[0] for c in cnt]
+            cnt_y = [c[1] for c in cnt]
+            mins_x.append(min(cnt_x))
+            mins_y.append(min(cnt_y))
+            maxs_x.append(max(cnt_x))
+            maxs_y.append(max(cnt_y))
+
+        dists_x = [ma - mi for ma, mi in zip(maxs_x, mins_x)]
+        dists_y = [ma - mi for ma, mi in zip(maxs_y, mins_y)]
+
+        dist_from_prev = [
+            ColorTracker.distance(
+                prv_pt,
+                (mins_x[i] + dists_x[i], mins_y[i] + dists_y[i])
+            ) for i in range(len(dists_x))]
+
+        areas = [x * y for x, y in zip(dists_x, dists_y)]
+        areas_copy = areas.copy()
+
+        # Exclude regions too far away
+        for i in range(len(dist_from_prev)):
+            if dist_from_prev[i] > 60:
+                e = areas[i]
+                areas_copy.remove(e)
+        areas = areas_copy
+        if not len(areas):
+            return None
+
+        index_of_largest = areas.index(max(areas))
+
+        top_left_pt = (mins_x[index_of_largest], mins_y[index_of_largest])
+        bottom_right_pt = (maxs_x[index_of_largest], maxs_y[index_of_largest])
+
+        x, y = top_left_pt[0], top_left_pt[1]
+        w, h = bottom_right_pt[0] - top_left_pt[0], bottom_right_pt[1] - top_left_pt[1]
+
+        self._previous_point = (x + w // 2, y + h // 2)
+
+        return ((x, y), (x + w, y + h))
 
 
 class TDLTracker(_PatchBasedMechanics):
