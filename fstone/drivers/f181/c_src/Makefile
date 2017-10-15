@@ -1,0 +1,1 @@
+avr-gcc -Os -DF_CPU=16000000UL -mmcu=atmega2560 -I /usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino -I /usr/share/arduino/hardware/archlinux-arduino/avr/variants/mega -c -o test.o config_test_ard.cpp
