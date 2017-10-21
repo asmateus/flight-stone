@@ -430,14 +430,17 @@ if __name__ == '__main__':
         'keytocontroller': keyboardEventTest,
         'serial': serialWriteReadTest,
         'localv': localVideoTest,
+        'localmixedtracking': LocalTrackingMixedMethod,
         'tracking': trackingTest,
         'patchselector': patchSelection,
         'kinectstream': kinectStreamTest,
         'simplestream': simpleStream,
         'trackingstream': trackingFromStream,
-        'colortracking': colorTrackingFromStream,
+        'colortrackingstream': colorTrackingFromStream,
+        'mixedtrackingstream': mixedTrackingFromStream,
         'stabilitytestcolor': stabilityTestColor,
         'stabilitytestkcf': stabilityTestKCF,
+        'stabilitytestmixed': stabilityTestMixedTracking,
     }
 
     if not test_mode:
