@@ -1,7 +1,7 @@
 '''Non generic controllers here. '''
 from representation.controllers import Controller
 from representation.controllers import genCheckDevice, checkDevice
-from representation.devices import LocalDevice, StreamDeviceStarTEC, KinectDevice
+from representation.devices import LocalDevice, StreamDeviceGoPro, KinectDevice
 from representation.responses import IOResponse, RESPONSE_STATUS
 import traceback
 import sys
@@ -93,7 +93,7 @@ class LocalVideoController(Controller):
 
 
 class StreamController(Controller):
-    def __init__(self, device=StreamDeviceStarTEC):
+    def __init__(self, device=StreamDeviceGoPro):
         super(StreamController, self).__init__()
         self.device = device
         self.pth = self.deviceQuery()
@@ -114,6 +114,9 @@ class StreamController(Controller):
         try:
             if self.pth:
                 capture = cv2.VideoCapture(1)
+                capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.device['baudrate'][1])
+                capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.device['baudrate'][0])
+
                 while True:
                     if self.endtr:
                         capture.release()

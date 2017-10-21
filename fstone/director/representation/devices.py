@@ -25,6 +25,15 @@ StreamDeviceStarTEC = {
 }
 
 
+StreamDeviceGoPro = {
+    'port': '/dev/video1',
+    'identifier': '0603:8612',
+    'datatype': type(bytes),
+    'baudrate': (480, 640, 3),
+    'language': None,
+}
+
+
 KinectDevice = {
     'port': None,
     'identifier': ('045e:02bf', '045e:02be', '045e:02c2'),

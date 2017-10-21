@@ -6,7 +6,6 @@ once through out the execution of the program.
 Singleton design pattern is implemented for this porpuse
 '''
 from threading import Thread
-import time
 
 
 class IOManager():

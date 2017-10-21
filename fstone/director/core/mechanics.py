@@ -98,7 +98,6 @@ class ColorTracker:
         # Frame must be RGB
         # First obtain the respective HSV value
         frame_hsv = ColorTracker.rgb2hsv(frame)
-        prv_pt = self._previous_point
 
         # Threshold the HSV image to get only red colors
         mask = cv2.inRange(frame_hsv, self._color[0], self._color[1])
@@ -156,6 +155,100 @@ class ColorTracker:
         return ((x, y), (x + w, y + h))
 
 
+class MixedTracker(_PatchBasedMechanics):
+    '''
+        This is a MixedTracker, it implements both TDLTracker and ColorTracker, when initializating
+        this tracker you must specify which of the two will be the main tracker and which will be
+        the support tracker. The default execution will be that of the main tracker, but, at fixed
+        intervals, a second hand opinion is issued to the support tracker, via the method
+        (getSupportDecision), and an agreement function is executed to determine the following
+        state of the algorithm.
+
+        Current limitations:
+        The support tracker can not be a memory algorithm, that is, it can not rely on
+        previous data as it is only called sporadically. As such, any tracker that subclasses
+        _PatchBasedMechanics is not suitable for observing. Well, you can do it, but it is not
+        recomended.
+    '''
+
+    MAXIMUM_AGREE_DISTANCE = 20
+
+    @staticmethod
+    def distance(p1, p2):
+        if p1 is None or p2 is None:
+            return 0
+        return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+    def __init__(self, main=None, support=None):
+        self._main = main
+        self._support = support
+
+        # Generalized call functions that receive the next frame as a parameter
+        self._main_find = None
+        self._support_find = None
+
+        # Interval to check for support decision, counted in frames
+        self.interval = 50
+
+    def overloadFindFunctions(self, main_overload, support_overload):
+        self._main_find = main_overload
+        self._support_find = support_overload
+
+    def findTarget(self, frame, state):
+        response = None
+        if self._main_find is not None and self._support_find is not None:
+            # See if support help is required
+            if self.interval == 50:
+                self.interval = 0
+                posible_main = self._main_find(frame, state)
+                posible_support = self._support_find(frame)
+
+                # Reach an agreement between the two conclusions
+                response = self.agreement(main=posible_main, support=posible_support)
+
+                # Change the main behavior, if possible, as a result of the agreement
+                self.changeOnAgreement(response, frame)
+            else:
+                response = self._main_find(frame, state)
+                self.interval += 1
+        return response
+
+    def getSupportDecision(self, frame):
+        self._support_find(frame)
+
+    def changeOnAgreement(self, agreement, frame):
+        x, y = agreement[0][0], agreement[0][1]
+        w, h = abs(x - agreement[1][0]), abs(y - agreement[1][1])
+        self._main.resetPatch([x, y, w, h], frame)
+
+    def agreement(main=None, support=None):
+        if main is None or support is None:
+            return main
+        else:
+            # Calculate the distance between the main and support decisions points
+            # Use MixedTracker own distance function for this
+            distance = MixedTracker.distance(main, support)
+
+            # Tracked points differ too much
+            if distance > MixedTracker.MAXIMUM_AGREE_DISTANCE:
+                # Support method is trusted for x, y location. Main is trusted for size
+                middle = (
+                    support[0][0] + abs(support[0][0] - support[1][0]) // 2,
+                    support[0][1] + abs(support[0][1] - support[1][1]) // 2)
+
+                agreement = (
+                    (middle[0] - abs(main[0][0] - main[1][0]) // 2,
+                        middle[1] - abs(main[0][1] - main[1][1]) // 2),
+                    (middle[0] + abs(main[0][0] - main[1][0]) // 2,
+                        middle[1] + abs(main[0][1] - main[1][1]) // 2)
+                )
+
+                return agreement
+
+            else:  # Tracked points are similar, trust main, unchanged
+                return main
+
+
 class TDLTracker(_PatchBasedMechanics):
     '''
         This is a Tracking, learning and detection tracker, implemented in OpenCV.
@@ -174,7 +267,7 @@ class TDLTracker(_PatchBasedMechanics):
         self.dispatcher = {
             TDLTracker.STATE_UNINITIATED: self.findTarget,
             TDLTracker.STATE_INITIATED: self.updateTarget,
-            TDLTracker.STATE_INTERRUPTED: self.findTarget,
+            TDLTracker.STATE_INTERRUPTED: self.restartTarget,
             TDLTracker.STATE_FINISHED: self.updateTarget,
         }
 
@@ -190,6 +283,9 @@ class TDLTracker(_PatchBasedMechanics):
     def restartTarget(self):
         self.assignRootPatch(self.original_patch)
         self.findTarget()
+
+    def resetPatch(self, min_patch, frame):
+        self.tracker.init(min_patch, frame)
 
     def findTarget(self):
         result = cv2.matchTemplate(self.current_frame, self.root_patch.patch, self.match_method)

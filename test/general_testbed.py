@@ -8,7 +8,7 @@ from utils.patch_selector import PatchSelectorManager
 from representation.devices import PIC16F1827Device
 from events.keyboard import KeyboardListener
 from events.tracking import TrackingListener
-from interface.minimal import Application as App
+from interface.minimal_qt import MinimalApplication as App
 from tkinter import Tk
 import argparse
 import traceback
@@ -160,8 +160,7 @@ def simpleStream():
     director = UIDirector()
 
     # Application instance to display the image
-    tk_controller = Tk()
-    application = App(tk_controller)
+    application = App.getInstance()
 
     # UI directors require that an application instance is passed to them, and it must implement
     # the updateVideoState method
@@ -172,13 +171,7 @@ def simpleStream():
 
     manager.readController(con_id)
 
-    while True:
-        if application.status:
-            application.updateVideoHolder()
-            application.update()
-            application.update_idletasks()
-        else:
-            break
+    application.startApplication()
 
 
 def trackingFromStream():
@@ -190,7 +183,7 @@ def trackingFromStream():
     track_director = TrackingDirector()
 
     # TrackingDirector needs a frame buffer, so we subscribe it to the manager
-    # manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
+    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
 
     # UIDirector also needs to be subscribed, to receive the frames
     manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])
@@ -198,9 +191,8 @@ def trackingFromStream():
     # We assign the controller to the manager
     con_id = manager.addController(controller)
 
-    # Assign application context for ui
-    tk_controller = Tk()
-    application = App(tk_controller)
+    # Application instance to display the image
+    application = App.getInstance()
 
     # UI directors require that an application instance is passed to them, and it must implement
     # the updateVideoState method
@@ -216,14 +208,7 @@ def trackingFromStream():
     # Start reading video source
     manager.readController(con_id)
 
-    # Start UI in main thread
-    while True:
-        if application.status:
-            application.updateVideoHolder()
-            application.update()
-            application.update_idletasks()
-        else:
-            break
+    application.startApplication()
 
 
 def stabilityTestColor():
@@ -244,9 +229,8 @@ def stabilityTestColor():
     # We assign the controller to the manager
     con_id = manager.addController(controller)
 
-    # Assign application context for ui
-    tk_controller = Tk()
-    application = App(tk_controller)
+    # Application instance to display the image
+    application = App.getInstance()
 
     # UI directors require that an application instance is passed to them, and it must implement
     # the updateVideoState method
@@ -263,14 +247,46 @@ def stabilityTestColor():
     # Start reading video source
     manager.readController(con_id)
 
-    # Start UI in main thread
-    while True:
-        if application.status:
-            application.updateVideoHolder()
-            application.update()
-            application.update_idletasks()
-        else:
-            break
+    application.startApplication()
+
+
+def stabilityTestKCF():
+    manager = IOManager.getInstance()
+    controller = StreamController()
+
+    # We require a tracking director and a UI director
+    ui_director = UIDirector()
+    track_director = TrackingDirector()
+    stability_director = StabilityDirector()
+
+    # TrackingDirector needs a frame buffer, so we subscribe it to the manager
+    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
+
+    # UIDirector also needs to be subscribed, to receive the frames
+    manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])
+
+    # We assign the controller to the manager
+    con_id = manager.addController(controller)
+
+    # Application instance to display the image
+    application = App.getInstance()
+
+    # UI directors require that an application instance is passed to them, and it must implement
+    # the updateVideoState method
+    ui_director.assignApplicationInstance(application)
+
+    # Now we need to link both directors
+    # Tracking director generates a tracking event that the UI director receives
+    listener = TrackingListener()
+    listener.addSubscriber(ui_director)
+    listener.addSubscriber(stability_director)
+
+    track_director.setTrackingListener(listener)
+
+    # Start reading video source
+    manager.readController(con_id)
+
+    application.startApplication()
 
 
 def colorTrackingFromStream():
@@ -290,9 +306,8 @@ def colorTrackingFromStream():
     # We assign the controller to the manager
     con_id = manager.addController(controller)
 
-    # Assign application context for ui
-    tk_controller = Tk()
-    application = App(tk_controller)
+    # Application instance to display the image
+    application = App.getInstance()
 
     # UI directors require that an application instance is passed to them, and it must implement
     # the updateVideoState method
@@ -308,14 +323,7 @@ def colorTrackingFromStream():
     # Start reading video source
     manager.readController(con_id)
 
-    # Start UI in main thread
-    while True:
-        if application.status:
-            application.updateVideoHolder()
-            application.update()
-            application.update_idletasks()
-        else:
-            break
+    application.startApplication()
 
 
 def patchSelection():
@@ -340,6 +348,7 @@ if __name__ == '__main__':
         'trackingstream': trackingFromStream,
         'colortracking': colorTrackingFromStream,
         'stabilitytestcolor': stabilityTestColor,
+        'stabilitytestkcf': stabilityTestKCF,
     }
 
     if not test_mode:

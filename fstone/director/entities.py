@@ -1,5 +1,5 @@
 from representation.controllers import GENERIC_TYPES
-from core.mechanics import TDLTracker, ColorTracker
+from core.mechanics import TDLTracker, ColorTracker, MixedTracker
 from representation.custom_controllers import CUSTOM_TYPES
 from utils.patch_selector import PatchSelectorManager
 from utils.config import DEFAULT_CONFIGS
@@ -98,6 +98,46 @@ class ColorTrackingDirector(_Director):
             self.listener.manageEvent(response)
 
 
+class MixedTrackingDirector(_Director):
+    def __init__(self):
+        super(MixedTrackingDirector, self).__init__()
+
+        main = TDLTracker()
+        supp = ColorTracker(DEFAULT_CONFIGS)
+
+        # Configurations for main tracker
+        self.tracking_state = TDLTracker.STATE_UNINITIATED
+        self.root_patch_name = DEFAULT_CONFIGS['default_patch_name']
+        self.patch = PatchSelectorManager.loadPersistentCopy(self.root_patch_name)
+
+        main.assignRootPatch(self.patch)
+
+        self.mechanism = MixedTracker(main=main, support=supp)
+        self.mechanism.overloadFindFunctions(main.feedFrame, supp.findTarget)
+        self.listener = None
+
+    def manageIOResponse(self, response):
+        if response.getType() == RESPONSE_TYPES['local_video']:
+            self.last_response = response.getData()
+            self.trackNextFrame()
+        elif response.getType() == RESPONSE_TYPES['stream']:
+            self.last_response = response.getData()
+            self.trackNextFrame()
+
+    def trackNextFrame(self):
+        response = self.mechanism.findTarget(self.last_response, self.tracking_state)
+
+        self.solveIssuedResponse(response)
+
+    def solveIssuedResponse(self, response):
+        if response is not None:
+            self.tracking_state = TDLTracker.STATE_INITIATED
+            self.listener.manageEvent(response)
+
+    def setTrackingListener(self, listener):
+        self.listener = listener
+
+
 class TrackingDirector(_Director):
     def __init__(self, root_patch_name=''):
         super(TrackingDirector, self).__init__()
@@ -144,7 +184,7 @@ class TrackingDirector(_Director):
     def solveIssuedResponse(self, response):
         if response is not None:
             self.tracking_state = TDLTracker.STATE_INITIATED
-            self.listener.manageEvent(response, self.mechanism.root_patch.patch)
+            self.listener.manageEvent(response)
 
 
 class StabilityDirector(_Director):
@@ -178,7 +218,9 @@ class StabilityDirector(_Director):
                 self.resetSnapShot(snapshot)
                 print('Setting root snapshot:', snapshot)
             else:
-                print('Stability vector:', self._calculateDistanceVector(snapshot))
+                ss = self._calculateDistanceVector(snapshot)
+                print('Stability vector:(x=' + str(ss[0]) +
+                      ', y=' + str(ss[1]) + ', z=' + str(ss[2]) + ')')
         if ev_type == 'keyboard':
                 print(rs)
 
