@@ -224,6 +224,80 @@ def trackingFromStream():
     application.startApplication()
 
 
+def colorTrackingFromStream():
+    manager = IOManager.getInstance()
+    controller = StreamController()
+
+    # We require a tracking director and a UI director
+    ui_director = UIDirector()
+    track_director = ColorTrackingDirector()
+
+    # TrackingDirector needs a frame buffer, so we subscribe it to the manager
+    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
+
+    # UIDirector also needs to be subscribed, to receive the frames
+    manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])
+
+    # We assign the controller to the manager
+    con_id = manager.addController(controller)
+
+    # Application instance to display the image
+    application = App.getInstance()
+
+    # UI directors require that an application instance is passed to them, and it must implement
+    # the updateVideoState method
+    ui_director.assignApplicationInstance(application)
+
+    # Now we need to link both directors
+    # Tracking director generates a tracking event that the UI director receives
+    listener = TrackingListener()
+    listener.addSubscriber(ui_director)
+
+    track_director.setTrackingListener(listener)
+
+    # Start reading video source
+    manager.readController(con_id)
+
+    application.startApplication()
+
+
+def mixedTrackingFromStream():
+    manager = IOManager.getInstance()
+    controller = StreamController()
+
+    # We require a tracking director and a UI director
+    ui_director = UIDirector()
+    track_director = MixedTrackingDirector()
+
+    # TrackingDirector needs a frame buffer, so we subscribe it to the manager
+    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
+
+    # UIDirector also needs to be subscribed, to receive the frames
+    manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])
+
+    # We assign the controller to the manager
+    con_id = manager.addController(controller)
+
+    # Application instance to display the image
+    application = App.getInstance()
+
+    # UI directors require that an application instance is passed to them, and it must implement
+    # the updateVideoState method
+    ui_director.assignApplicationInstance(application)
+
+    # Now we need to link both directors
+    # Tracking director generates a tracking event that the UI director receives
+    listener = TrackingListener()
+    listener.addSubscriber(ui_director)
+
+    track_director.setTrackingListener(listener)
+
+    # Start reading video source
+    manager.readController(con_id)
+
+    application.startApplication()
+
+
 def stabilityTestColor():
     manager = IOManager.getInstance()
     controller = StreamController()
@@ -293,43 +367,6 @@ def stabilityTestKCF():
     listener = TrackingListener()
     listener.addSubscriber(ui_director)
     listener.addSubscriber(stability_director)
-
-    track_director.setTrackingListener(listener)
-
-    # Start reading video source
-    manager.readController(con_id)
-
-    application.startApplication()
-
-
-def colorTrackingFromStream():
-    manager = IOManager.getInstance()
-    controller = StreamController()
-
-    # We require a tracking director and a UI director
-    ui_director = UIDirector()
-    track_director = ColorTrackingDirector()
-
-    # TrackingDirector needs a frame buffer, so we subscribe it to the manager
-    manager.addSubscriber(track_director, CUSTOM_TYPES['stream'])
-
-    # UIDirector also needs to be subscribed, to receive the frames
-    manager.addSubscriber(ui_director, CUSTOM_TYPES['stream'])
-
-    # We assign the controller to the manager
-    con_id = manager.addController(controller)
-
-    # Application instance to display the image
-    application = App.getInstance()
-
-    # UI directors require that an application instance is passed to them, and it must implement
-    # the updateVideoState method
-    ui_director.assignApplicationInstance(application)
-
-    # Now we need to link both directors
-    # Tracking director generates a tracking event that the UI director receives
-    listener = TrackingListener()
-    listener.addSubscriber(ui_director)
 
     track_director.setTrackingListener(listener)
 
