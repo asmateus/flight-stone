@@ -128,8 +128,9 @@ class PatchSelectorManager:
     def triggerFeatureExtraction(self):
         self.patch.descriptions = list()
         for descriptor in self.descriptors:
-            self.patch.descriptions.append(
-                (str(descriptor), descriptor.getDescription(self.patch.patch)))
+            pass
+            # self.patch.descriptions.append(
+            #    (str(descriptor), descriptor.getDescription(self.patch.patch)))
 
     def allowInteractiveCalls(self):
         print('Interactive Calls')
